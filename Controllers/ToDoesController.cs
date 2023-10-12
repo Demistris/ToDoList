@@ -27,6 +27,13 @@ namespace ToDoList.Controllers
                           Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
         }
 
+        public async Task<IActionResult> BuildToDoTable()
+        {
+            return _context.ToDos != null ?
+                        PartialView("_ToDoTable", await _context.ToDos.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+        }
+
         // GET: ToDoes/Details/5
         public async Task<IActionResult> Details(int? id)
         {

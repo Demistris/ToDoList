@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "XegEVAXydvxaux4VQ8j473ewKJeY8GcjbRatJ5fnIoA=",
+  "Hash": "MvOtKHP829w2ZFPVXbc6fkMWfsEi8vzVB9vqL2rGHNY=",
   "Source": "ToDoList",
   "BasePath": "_content/ToDoList",
   "Mode": "Default",
@@ -1103,6 +1103,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\BuildTable.js",
+      "SourceId": "ToDoList",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\",
+      "BasePath": "_content/ToDoList",
+      "RelativePath": "js/BuildTable.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\BuildTable.js"
     },
     {
       "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\site.js",
