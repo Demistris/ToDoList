@@ -1,17 +1,27 @@
-﻿@model IEnumerable<ToDoList.Models.ToDo>
+﻿@model ToDoList.Models.ToDo
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <div id="tableDiv"></div>
 
+<div id="toDoCreateForm">
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AJAXCreate" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.AntiForgeryToken()
+                <div class="form-group">
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @section Scripts{
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/js/BuildTable.js"></script>
 }

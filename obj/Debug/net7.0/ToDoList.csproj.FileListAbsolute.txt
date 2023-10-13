@@ -261,3 +261,4 @@ D:\AllProjects\Projects\ToDoListProject\ToDoList\bin\Debug\net7.0\ru\Microsoft.C
 D:\AllProjects\Projects\ToDoListProject\ToDoList\bin\Debug\net7.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\AllProjects\Projects\ToDoListProject\ToDoList\bin\Debug\net7.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 D:\AllProjects\Projects\ToDoListProject\ToDoList\bin\Debug\net7.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+D:\AllProjects\Projects\ToDoListProject\ToDoList\bin\Debug\net7.0\libman.json

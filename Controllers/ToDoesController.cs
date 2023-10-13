@@ -20,11 +20,13 @@ namespace ToDoList.Controllers
         }
 
         // GET: ToDoes
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-              return _context.ToDos != null ? 
-                          View(await _context.ToDos.ToListAsync()) :
-                          Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+            //return _context.ToDos != null ? 
+            //            View(await _context.ToDos.ToListAsync()) :
+            //            Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+
+            return View();
         }
 
         public async Task<IActionResult> BuildToDoTable()
@@ -73,6 +75,22 @@ namespace ToDoList.Controllers
             }
 
             return View(toDo);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AJAXCreate([Bind("Id,Description")] ToDo toDo)
+        {
+            if (ModelState.IsValid)
+            {
+                toDo.IsChecked = false;
+                _context.Add(toDo);
+                await _context.SaveChangesAsync();
+            }
+
+            return _context.ToDos != null ?
+                        PartialView("_ToDoTable", await _context.ToDos.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
         }
 
         // GET: ToDoes/Edit/5
