@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -29,10 +30,29 @@ namespace ToDoList.Controllers
             return View();
         }
 
+        public async Task<IEnumerable<ToDo>> GetMyToDoesAsync()
+        {
+            IEnumerable<ToDo> myToDoes = await _context.ToDos.ToListAsync();
+
+            int completeCount = 0;
+
+            foreach (ToDo toDo in myToDoes)
+            {
+                if (toDo.IsChecked)
+                {
+                    completeCount++;
+                }
+            }
+
+            ViewBag.Percent = Math.Round(100f * ((float)completeCount / (float)myToDoes.Count()));
+
+            return myToDoes;
+        }
+
         public async Task<IActionResult> BuildToDoTable()
         {
             return _context.ToDos != null ?
-                        PartialView("_ToDoTable", await _context.ToDos.ToListAsync()) :
+                        PartialView("_ToDoTable", await GetMyToDoesAsync()) :
                         Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
         }
 
@@ -89,7 +109,7 @@ namespace ToDoList.Controllers
             }
 
             return _context.ToDos != null ?
-                        PartialView("_ToDoTable", await _context.ToDos.ToListAsync()) :
+                        PartialView("_ToDoTable", await GetMyToDoesAsync()) :
                         Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
         }
 
@@ -181,7 +201,7 @@ namespace ToDoList.Controllers
             }
 
             return _context.ToDos != null ?
-                        PartialView("_ToDoTable", await _context.ToDos.ToListAsync()) :
+                        PartialView("_ToDoTable", await GetMyToDoesAsync()) :
                         Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
         }
 

@@ -2,9 +2,19 @@
 
 @{
 }
+
+<div id="progressBarToDo">
+    <p>
+        @(ViewBag.Percent)%
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width:@(Html.Encode(ViewBag.Percent))%"></div>
+        </div>
+    </p>
+</div>
+
 <table class="table">
     <thead>
-        <tr>
+        @* <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Description)
             </th>
@@ -12,7 +22,7 @@
                 @Html.DisplayNameFor(model => model.IsChecked)
             </th>
             <th></th>
-        </tr>
+        </tr> *@
     </thead>
     <tbody>
         @foreach (var item in Model)
