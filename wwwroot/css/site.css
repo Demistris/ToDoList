@@ -20,3 +20,10 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/*Styling for todo items*/
+.CompletedToDo {
+    text-decoration: line-through;
+    color: grey;
+    font-style: italic;
+}
