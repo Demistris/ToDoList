@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "U8wVGV1Z5gU5qFUP/gTxAjHbpl7qIySPuz/QLKpHTKY=",
+  "Hash": "yS1EYq++Urs50UALG7eyx4gFXHWsmL3P185aJPf1gwg=",
   "Source": "ToDoList",
   "BasePath": "_content/ToDoList",
   "Mode": "Default",
@@ -1103,6 +1103,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\AddCheckboxListener.js",
+      "SourceId": "ToDoList",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\",
+      "BasePath": "_content/ToDoList",
+      "RelativePath": "js/AddCheckboxListener.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\AddCheckboxListener.js"
     },
     {
       "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\BuildTable.js",

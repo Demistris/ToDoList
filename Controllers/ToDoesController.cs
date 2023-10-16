@@ -144,6 +144,47 @@ namespace ToDoList.Controllers
             return View(toDo);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AJAXEdit(int? id, bool value)
+        {
+            if (id == null || _context.ToDos == null)
+            {
+                return NotFound();
+            }
+
+            var toDo = await _context.ToDos.FindAsync(id);
+            
+            if (toDo == null || id != toDo.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    toDo.IsChecked = value;
+                    _context.Update(toDo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ToDoExists(toDo.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return _context.ToDos != null ?
+                        PartialView("_ToDoTable", await _context.ToDos.ToListAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+        }
+
         // GET: ToDoes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
