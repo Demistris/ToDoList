@@ -21,6 +21,14 @@
       "PackagePath": "staticwebassets\\js\\BuildTable.js"
     },
     {
+      "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\DragAndDrop.js",
+      "PackagePath": "staticwebassets\\js\\DragAndDrop.js"
+    },
+    {
+      "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\RefreshToDoList.js",
+      "PackagePath": "staticwebassets\\js\\RefreshToDoList.js"
+    },
+    {
       "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },

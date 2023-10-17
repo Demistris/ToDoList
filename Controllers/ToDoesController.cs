@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ToDoList.Data;
 using ToDoList.Models;
+using System.Linq;
 
 namespace ToDoList.Controllers
 {
@@ -104,6 +105,7 @@ namespace ToDoList.Controllers
             if (ModelState.IsValid)
             {
                 toDo.IsChecked = false;
+                toDo.Order = toDo.Id;
                 _context.Add(toDo);
                 await _context.SaveChangesAsync();
             }
@@ -245,6 +247,46 @@ namespace ToDoList.Controllers
         private bool ToDoExists(int id)
         {
           return (_context.ToDos?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        //Drag and drop
+
+        [HttpPost]
+        public async Task<IActionResult> ReorderToDoItems(int itemId, int targetIndex)
+        {
+            // Fetch the dragged item.
+            var draggedItem = await _context.ToDos.FirstOrDefaultAsync(t => t.Id == itemId);
+
+            if (draggedItem == null)
+            {
+                return NotFound();
+            }
+
+            // Determine the current position of the dragged item.
+            var currentIndex = _context.ToDos.ToList().FindIndex(t => t.Id == itemId);
+
+            // Remove the item from the current position.
+            _context.ToDos.Remove(draggedItem);
+
+            // Update the order of other items to accommodate the drag-and-drop operation.
+            if (targetIndex < currentIndex)
+            {
+                _context.ToDos.Where(t => t.Order >= targetIndex && t.Order < currentIndex).ToList().ForEach(t => t.Order++);
+            }
+            else
+            {
+                _context.ToDos.Where(t => t.Order > currentIndex && t.Order <= targetIndex).ToList().ForEach(t => t.Order--);
+            }
+
+            // Set the new order for the dragged item.
+            draggedItem.Order = targetIndex;
+
+            // Add the item back to the context with the updated order.
+            _context.ToDos.Add(draggedItem);
+
+            await _context.SaveChangesAsync();
+
+            return NoContent(); // Or return any appropriate response (e.g., NoContent, Ok, etc.).
         }
     }
 }

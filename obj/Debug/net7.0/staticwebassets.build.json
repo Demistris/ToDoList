@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "yS1EYq++Urs50UALG7eyx4gFXHWsmL3P185aJPf1gwg=",
+  "Hash": "3iaz0jhQ9Mi6dMjhgXu7s1qZTRafgiYyuunXQiZBeMY=",
   "Source": "ToDoList",
   "BasePath": "_content/ToDoList",
   "Mode": "Default",
@@ -1137,6 +1137,40 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\BuildTable.js"
+    },
+    {
+      "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\DragAndDrop.js",
+      "SourceId": "ToDoList",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\",
+      "BasePath": "_content/ToDoList",
+      "RelativePath": "js/DragAndDrop.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\DragAndDrop.js"
+    },
+    {
+      "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\RefreshToDoList.js",
+      "SourceId": "ToDoList",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\",
+      "BasePath": "_content/ToDoList",
+      "RelativePath": "js/RefreshToDoList.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\RefreshToDoList.js"
     },
     {
       "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\site.js",

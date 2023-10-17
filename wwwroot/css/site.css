@@ -27,3 +27,23 @@ body {
     color: grey;
     font-style: italic;
 }
+
+/* Style for the draggable element */
+[draggable="true"] {
+    cursor: move;
+}
+
+/* Style for the dragged element while being dragged */
+[draggable="true"]:active {
+    opacity: 0.7;
+}
+
+/* Style for the drop target */
+[ondragover] {
+    border: 2px dashed #007BFF; /* Change the border color as needed */
+}
+
+/* Style for the drop target when the element is being dragged over it */
+[ondragover]:active {
+    background-color: #f0f0f0; /* Change the background color as needed */
+}
