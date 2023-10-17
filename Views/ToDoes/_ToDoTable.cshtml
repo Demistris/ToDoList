@@ -5,24 +5,21 @@
 
 <div id="progressBarToDo">
     <p>
-        @(ViewBag.Percent)%
         <div class="progress">
-            <div class="progress-bar" role="progressbar" style="width:@(Html.Encode(ViewBag.Percent))%"></div>
+            @if (ViewBag.Percent == 100f)
+            {
+                <div class="progress-bar bg-success" role="progressbar" style="width:@(Html.Encode(ViewBag.Percent))%">@(ViewBag.Percent)%</div>
+            }
+            else
+            {
+                <div class="progress-bar bg-info" role="progressbar" style="width:@(Html.Encode(ViewBag.Percent))%">@(ViewBag.Percent)%</div>
+            }
         </div>
     </p>
 </div>
 
 <table class="table">
     <thead>
-        @* <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsChecked)
-            </th>
-            <th></th>
-        </tr> *@
     </thead>
     <tbody>
         @foreach (var item in Model)
