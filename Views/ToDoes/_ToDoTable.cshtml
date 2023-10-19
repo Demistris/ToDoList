@@ -26,15 +26,15 @@
         {
             <tr class="draggable-item" id="item-@item.Id" ondragstart="OnDragStart(event), @item.Id" ondrop="OnDrop(event, @item.Order)">
                 <td>
-                    <div>
+                    <div class="editable-description" data-id="@item.Id">
                         @if (!item.IsChecked)
                         {
-                            @Html.DisplayFor(modelItem => item.Description)
+                            <span>@Html.DisplayFor(modelItem => item.Description)</span>
                         }
                         else
                         {
                             <div class="CompletedToDo">
-                                @Html.DisplayFor(modelItem => item.Description)
+                                <span>@Html.DisplayFor(modelItem => item.Description)</span>
                             </div>
                         }
                     </div>
@@ -43,7 +43,6 @@
                     @Html.CheckBoxFor(modelItem => item.IsChecked, new { id = item.Id, @class = "ActiveCheck" })
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
@@ -52,3 +51,4 @@
 </table>
 
 <script src="~/js/AddCheckboxListener.js"></script>
+<script src="~/js/EditDescription.js"></script>

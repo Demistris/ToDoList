@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using ToDoList.Data;
 using ToDoList.Models;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace ToDoList.Controllers
 {
@@ -186,6 +187,47 @@ namespace ToDoList.Controllers
                 try
                 {
                     toDo.IsChecked = value;
+                    _context.Update(toDo);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ToDoExists(toDo.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return _context.ToDos != null ?
+                        PartialView("_ToDoTable", await GetMyToDoesAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateDescription(int? id, string description)
+        {
+            if (id == null || _context.ToDos == null)
+            {
+                return NotFound();
+            }
+
+            var toDo = await _context.ToDos.FindAsync(id);
+
+            if (toDo == null || id != toDo.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    toDo.Description = description;
                     _context.Update(toDo);
                     await _context.SaveChangesAsync();
                 }

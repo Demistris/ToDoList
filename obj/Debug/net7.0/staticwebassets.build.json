@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "2a4wX8j0dm3MxlpCaTH20xsUi2gAKxP/gGdfMGha464=",
+  "Hash": "Z4rhWKl4CQGkZDASZrQ4fk1CieYZIZh+eFjNF/qARvI=",
   "Source": "ToDoList",
   "BasePath": "_content/ToDoList",
   "Mode": "Default",
@@ -1137,6 +1137,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\BuildTable.js"
+    },
+    {
+      "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\EditDescription.js",
+      "SourceId": "ToDoList",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\",
+      "BasePath": "_content/ToDoList",
+      "RelativePath": "js/EditDescription.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\EditDescription.js"
     },
     {
       "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\InputRefresh.js",
