@@ -48,7 +48,9 @@ namespace ToDoList.Controllers
 
             ViewBag.Percent = Math.Round(100f * ((float)completeCount / (float)myToDoes.Count()));
 
-            return myToDoes;
+            var sortedTodoItems = myToDoes.OrderBy(item => item.IsChecked).ToList();
+
+            return sortedTodoItems;
         }
 
         public async Task<IActionResult> BuildToDoTable()
@@ -291,44 +293,38 @@ namespace ToDoList.Controllers
           return (_context.ToDos?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        //Drag and drop
+        // POST: ToDoes/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AJAXDelete(int id)
+        {
+            if (_context.ToDos == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+            }
 
-        //[HttpPost]
-        //public async Task<IActionResult> ReorderToDoItems(int itemId, int targetIndex)
-        //{
-        //    // Fetch the dragged item.
-        //    var draggedItem = await _context.ToDos.FirstOrDefaultAsync(t => t.Id == itemId);
+            var toDo = await _context.ToDos.FindAsync(id);
 
-        //    if (draggedItem == null)
-        //    {
-        //        return NotFound();
-        //    }
+            if (toDo != null)
+            {
+                _context.ToDos.Remove(toDo);
+                Temp("TO DO IS NOT NULL");
+            }
+            else
+            {
+                Temp("TO DO IS NULL");
+            }
 
-        //    // Determine the current position of the dragged item.
-        //    var currentIndex = _context.ToDos.ToList().FindIndex(t => t.Id == itemId);
+            await _context.SaveChangesAsync();
 
-        //    // Remove the item from the current position.
-        //    _context.ToDos.Remove(draggedItem);
+            return _context.ToDos != null ?
+                        PartialView("_ToDoTable", await GetMyToDoesAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+        }
 
-        //    // Update the order of other items to accommodate the drag-and-drop operation.
-        //    if (targetIndex < currentIndex)
-        //    {
-        //        _context.ToDos.Where(t => t.Order >= targetIndex && t.Order < currentIndex).ToList().ForEach(t => t.Order++);
-        //    }
-        //    else
-        //    {
-        //        _context.ToDos.Where(t => t.Order > currentIndex && t.Order <= targetIndex).ToList().ForEach(t => t.Order--);
-        //    }
-
-        //    // Set the new order for the dragged item.
-        //    draggedItem.Order = targetIndex;
-
-        //    // Add the item back to the context with the updated order.
-        //    _context.ToDos.Add(draggedItem);
-
-        //    await _context.SaveChangesAsync();
-
-        //    return NoContent(); // Or return any appropriate response (e.g., NoContent, Ok, etc.).
-        //}
+        private string Temp(string temporary)
+        {
+            return temporary;
+        }
     }
 }

@@ -21,16 +21,16 @@
       "PackagePath": "staticwebassets\\js\\BuildTable.js"
     },
     {
+      "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\DeleteToDo.js",
+      "PackagePath": "staticwebassets\\js\\DeleteToDo.js"
+    },
+    {
       "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\EditDescription.js",
       "PackagePath": "staticwebassets\\js\\EditDescription.js"
     },
     {
       "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\InputRefresh.js",
       "PackagePath": "staticwebassets\\js\\InputRefresh.js"
-    },
-    {
-      "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\RefreshToDoList.js",
-      "PackagePath": "staticwebassets\\js\\RefreshToDoList.js"
     },
     {
       "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\site.js",
