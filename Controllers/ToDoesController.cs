@@ -251,42 +251,42 @@ namespace ToDoList.Controllers
 
         //Drag and drop
 
-        [HttpPost]
-        public async Task<IActionResult> ReorderToDoItems(int itemId, int targetIndex)
-        {
-            // Fetch the dragged item.
-            var draggedItem = await _context.ToDos.FirstOrDefaultAsync(t => t.Id == itemId);
+        //[HttpPost]
+        //public async Task<IActionResult> ReorderToDoItems(int itemId, int targetIndex)
+        //{
+        //    // Fetch the dragged item.
+        //    var draggedItem = await _context.ToDos.FirstOrDefaultAsync(t => t.Id == itemId);
 
-            if (draggedItem == null)
-            {
-                return NotFound();
-            }
+        //    if (draggedItem == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            // Determine the current position of the dragged item.
-            var currentIndex = _context.ToDos.ToList().FindIndex(t => t.Id == itemId);
+        //    // Determine the current position of the dragged item.
+        //    var currentIndex = _context.ToDos.ToList().FindIndex(t => t.Id == itemId);
 
-            // Remove the item from the current position.
-            _context.ToDos.Remove(draggedItem);
+        //    // Remove the item from the current position.
+        //    _context.ToDos.Remove(draggedItem);
 
-            // Update the order of other items to accommodate the drag-and-drop operation.
-            if (targetIndex < currentIndex)
-            {
-                _context.ToDos.Where(t => t.Order >= targetIndex && t.Order < currentIndex).ToList().ForEach(t => t.Order++);
-            }
-            else
-            {
-                _context.ToDos.Where(t => t.Order > currentIndex && t.Order <= targetIndex).ToList().ForEach(t => t.Order--);
-            }
+        //    // Update the order of other items to accommodate the drag-and-drop operation.
+        //    if (targetIndex < currentIndex)
+        //    {
+        //        _context.ToDos.Where(t => t.Order >= targetIndex && t.Order < currentIndex).ToList().ForEach(t => t.Order++);
+        //    }
+        //    else
+        //    {
+        //        _context.ToDos.Where(t => t.Order > currentIndex && t.Order <= targetIndex).ToList().ForEach(t => t.Order--);
+        //    }
 
-            // Set the new order for the dragged item.
-            draggedItem.Order = targetIndex;
+        //    // Set the new order for the dragged item.
+        //    draggedItem.Order = targetIndex;
 
-            // Add the item back to the context with the updated order.
-            _context.ToDos.Add(draggedItem);
+        //    // Add the item back to the context with the updated order.
+        //    _context.ToDos.Add(draggedItem);
 
-            await _context.SaveChangesAsync();
+        //    await _context.SaveChangesAsync();
 
-            return NoContent(); // Or return any appropriate response (e.g., NoContent, Ok, etc.).
-        }
+        //    return NoContent(); // Or return any appropriate response (e.g., NoContent, Ok, etc.).
+        //}
     }
 }
