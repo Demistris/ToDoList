@@ -24,7 +24,7 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr class="draggable-item" id="item-@item.Id" ondragstart="OnDragStart(event), @item.Id" ondrop="OnDrop(event, @item.Order)">
+            <tr>
                 <td>
                     <div class="editable-description" data-id="@item.Id">
                         @if (!item.IsChecked)
