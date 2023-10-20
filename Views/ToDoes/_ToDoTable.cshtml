@@ -43,13 +43,12 @@
                     @Html.CheckBoxFor(modelItem => item.IsChecked, new { id = item.Id, @class = "ActiveCheck" })
                 </td>
                 <td>
-                    @* <a asp-action="AJAXDelete" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" asp-route-id="@item.Id" class="DeleteItem">Delete</a> *@
-                    @* <form asp-action="AJAXDelete" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="DeleteItem">
+                    <form asp-action="AJAXDelete" asp-route-id="@item.Id" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="DeleteItem">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         @Html.AntiForgeryToken()
-                        <input asp-route-id="@item.Id" type="hidden" />
+                        <input type="hidden" />
                         <input type="submit" value="X" class="btn btn-danger" />
-                    </form> *@
+                    </form>
                 </td>
             </tr>
         }

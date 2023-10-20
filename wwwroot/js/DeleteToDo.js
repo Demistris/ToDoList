@@ -1,12 +1,12 @@
 ﻿$(document).ready(function () {
-    $(".DeleteItem").on("click", function () {
+    $('.DeleteItem').on('click', function () {
         var self = $(this);
         var id = self.attr('id');
 
         $.ajax({
-            url: "/ToDoes/AJAXDelete",
+            url: '/ToDoes/AJAXDelete',
+            type: 'POST',
             data: { id: id },
-            type: "POST",
             success: function (result) {
                 $('#tableDiv').html(result);
             }

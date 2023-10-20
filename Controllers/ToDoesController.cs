@@ -46,7 +46,14 @@ namespace ToDoList.Controllers
                 }
             }
 
-            ViewBag.Percent = Math.Round(100f * ((float)completeCount / (float)myToDoes.Count()));
+            if(myToDoes.Count() > 0)
+            {
+                ViewBag.Percent = Math.Round(100f * ((float)completeCount / (float)myToDoes.Count()));
+            }
+            else
+            {
+                ViewBag.Percent = 0f;
+            }
 
             var sortedTodoItems = myToDoes.OrderBy(item => item.IsChecked).ToList();
 
@@ -293,7 +300,7 @@ namespace ToDoList.Controllers
           return (_context.ToDos?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        // POST: ToDoes/Delete/5
+        // POST: ToDoes/AJAXDelete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AJAXDelete(int id)
@@ -308,23 +315,12 @@ namespace ToDoList.Controllers
             if (toDo != null)
             {
                 _context.ToDos.Remove(toDo);
-                Temp("TO DO IS NOT NULL");
+                await _context.SaveChangesAsync();
             }
-            else
-            {
-                Temp("TO DO IS NULL");
-            }
-
-            await _context.SaveChangesAsync();
 
             return _context.ToDos != null ?
                         PartialView("_ToDoTable", await GetMyToDoesAsync()) :
                         Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
-        }
-
-        private string Temp(string temporary)
-        {
-            return temporary;
         }
     }
 }
