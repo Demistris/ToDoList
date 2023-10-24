@@ -21,6 +21,14 @@
       "PackagePath": "staticwebassets\\js\\BuildTable.js"
     },
     {
+      "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\CheckboxAll.js",
+      "PackagePath": "staticwebassets\\js\\CheckboxAll.js"
+    },
+    {
+      "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\DeleteCheckedToDoes.js",
+      "PackagePath": "staticwebassets\\js\\DeleteCheckedToDoes.js"
+    },
+    {
       "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\DeleteToDo.js",
       "PackagePath": "staticwebassets\\js\\DeleteToDo.js"
     },

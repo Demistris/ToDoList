@@ -14,10 +14,25 @@
                     <a>. . .</a>
 
                     <ul>
-                        <li><a>Change list name</a></li>
-                        <li><a asp-action="AJAXDeleteAllChecked" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv">Remove all checked items</a></li>
-                        <li><a>Check all items</a></li>
-                        <li><a>Uncheck all items</a></li>
+                        <li>
+                            <a>Change list name</a>
+                        </li>
+                        <li>
+                            <form asp-action="AJAXDeleteAllChecked" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                @Html.AntiForgeryToken()
+                                <div class="form-group">
+                                    <input type="submit" value="Remove all checked items" class="btnDeleteAll" />
+                                </div>
+                            </form>
+                            @* <a asp-action="AJAXDeleteAllChecked" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnDeleteAll">Remove all checked items</a> *@
+                        </li>
+                        <li>
+                            <a asp-action="AJAXEditAll" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnCheckAll" data-id="1">Check all items</a>
+                        </li>
+                        <li>
+                            <a asp-action="AJAXEditAll" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnCheckAll" data-id="0">Uncheck all items</a>
+                        </li>
                     </ul>
                 </li>
             </ul>
@@ -46,4 +61,6 @@
     <script src="~/lib/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/js/BuildTable.js"></script>
     <script src="~/js/InputRefresh.js"></script>
+    <script src="~/js/DeleteCheckedToDoes.js"></script>
+    <script src="~/js/CheckboxAll.js"></script>
 }

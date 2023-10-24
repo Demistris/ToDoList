@@ -219,6 +219,47 @@ namespace ToDoList.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> AJAXEditAll(bool value)
+        {
+            if (_context.ToDos == null)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    foreach(var item in _context.ToDos)
+                    {
+                        if(item.IsChecked != value)
+                        {
+                            item.IsChecked = value;
+                            _context.Update(item);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (_context.ToDos == null)
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+            }
+
+            return _context.ToDos != null ?
+                        PartialView("_ToDoTable", await GetMyToDoesAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+        }
+
+        [HttpPost]
         public async Task<IActionResult> UpdateDescription(int? id, string description)
         {
             if (id == null || _context.ToDos == null)
@@ -324,7 +365,7 @@ namespace ToDoList.Controllers
                         Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
         }
 
-        // POST: ToDoes/AJAXDeleteAllChecked/5
+        // POST: ToDoes/AJAXDeleteAllChecked
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AJAXDeleteAllChecked()
