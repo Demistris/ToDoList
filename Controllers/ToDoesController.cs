@@ -323,5 +323,33 @@ namespace ToDoList.Controllers
                         PartialView("_ToDoTable", await GetMyToDoesAsync()) :
                         Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
         }
+
+        // POST: ToDoes/AJAXDeleteAllChecked/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AJAXDeleteAllChecked()
+        {
+            if (_context.ToDos == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+            }
+
+            foreach(var item in _context.ToDos)
+            {
+                if(item.IsChecked)
+                {
+                    if (item != null)
+                    {
+                        _context.ToDos.Remove(item);
+                    }
+                }
+            }
+
+            await _context.SaveChangesAsync();
+
+            return _context.ToDos != null ?
+                        PartialView("_ToDoTable", await GetMyToDoesAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+        }
     }
 }

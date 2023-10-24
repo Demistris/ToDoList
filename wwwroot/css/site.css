@@ -47,3 +47,73 @@ body {
 [ondragover]:active {
     background-color: #f0f0f0; /* Change the background color as needed */
 }
+
+/* Top navbar */
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial;
+    font-size: 18px;
+}
+.container {
+    width: 100%;
+    margin: auto;
+}
+
+.navbar {
+    background: #55d6aa;
+}
+
+.title {
+    float: left;
+}
+
+.nav {
+    float: right;
+}
+
+    .nav ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+        .nav ul li {
+            display: inline-block;
+        }
+
+            .nav ul li a {
+                text-decoration: none;
+                color: black;
+                padding: 15px;
+                display: block;
+            }
+
+            .nav ul li:hover {
+                background-color: silver;
+            }
+
+        .nav ul ul {
+            display: none;
+            margin: 0;
+            background-color: #55d6aa;
+            position: absolute;
+        }
+
+        .nav ul > li:hover > ul {
+            display: block;
+        }
+
+        .nav ul ul li {
+            display: block;
+            width: 250px;
+        }
+
+            .nav ul ul li a {
+                text-decoration: none;
+                color: black;
+                padding: 15px;
+                display: block;
+                font-size: 14px;
+            }
