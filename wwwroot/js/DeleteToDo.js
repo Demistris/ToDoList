@@ -1,15 +1,16 @@
 ﻿$(document).ready(function () {
-    $('.DeleteItem').on('click', function () {
-        var self = $(this);
-        var id = self.attr('id');
+    $(document).on("click", ".btnDelete", function () {
+
+        var data = $(this).data("id");
 
         $.ajax({
-            url: '/ToDoes/AJAXDelete',
-            type: 'POST',
-            data: { id: id },
-            success: function (result) {
-                $('#tableDiv').html(result);
+            type: "POST",
+            url: '/ToDoes/AJAXDelete/',
+            data: data,
+            success: function (data) {
+                $('#tableDiv').html(data);
             }
         });
+
     });
 });
