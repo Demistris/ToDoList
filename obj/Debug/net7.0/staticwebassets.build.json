@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "GWt0lSUy+1q/EN18hlzfINKixnwNTqZTDGWMF7mtMqc=",
+  "Hash": "LppdCy2WVC/V4nTHzXpGtWEA1/u7n8qwXEsRJRrzLTM=",
   "Source": "ToDoList",
   "BasePath": "_content/ToDoList",
   "Mode": "Default",
@@ -1222,6 +1222,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\InputRefresh.js"
+    },
+    {
+      "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\PopUpActivity.js",
+      "SourceId": "ToDoList",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\",
+      "BasePath": "_content/ToDoList",
+      "RelativePath": "js/PopUpActivity.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\PopUpActivity.js"
     },
     {
       "Identity": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\site.js",

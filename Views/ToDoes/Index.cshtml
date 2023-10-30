@@ -6,7 +6,7 @@
 
 <div class="navbar">
     <div class="container">
-        <h2 class="title">My to do list</h2>
+        <h2 class="title">@ViewBag._listName</h2>
 
         <div class="nav">
             <ul>
@@ -15,17 +15,19 @@
 
                     <ul>
                         <li>
-                            <a>Change list name</a>
+                            @* <a asp-action="" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="">Change list name</a> *@
+                            <a id="changeListNameBtn" asp-action="" data-ajax="true" data-ajax-method="get">Change list name</a>
                         </li>
                         <li>
-                            <form asp-action="AJAXDeleteAllChecked" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv">
+                            @* <form asp-action="AJAXDeleteAllChecked" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 @Html.AntiForgeryToken()
                                 <div class="form-group">
                                     <input type="submit" value="Remove all checked items" class="btnDeleteAll" />
                                 </div>
-                            </form>
-                            @* <a asp-action="AJAXDeleteAllChecked" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnDeleteAll">Remove all checked items</a> *@
+                            </form> *@
+
+                            <a asp-action="AJAXDeleteAllChecked" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnDeleteAll">Remove all checked items</a>
                         </li>
                         <li>
                             <a asp-action="AJAXEditAll" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnCheckAll" data-id="1">Check all items</a>
@@ -63,4 +65,5 @@
     <script src="~/js/InputRefresh.js"></script>
     <script src="~/js/DeleteCheckedToDoes.js"></script>
     <script src="~/js/CheckboxAll.js"></script>
+    <script src="~/js/PopUpActivity.js"></script>
 }

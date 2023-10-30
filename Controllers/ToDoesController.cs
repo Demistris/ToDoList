@@ -17,6 +17,7 @@ namespace ToDoList.Controllers
     public class ToDoesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private string _listName = "My to do list";
 
         public ToDoesController(ApplicationDbContext context)
         {
@@ -29,7 +30,7 @@ namespace ToDoList.Controllers
             //return _context.ToDos != null ? 
             //            View(await _context.ToDos.ToListAsync()) :
             //            Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
-
+            ViewBag._listName = _listName;
             return View();
         }
 
@@ -387,6 +388,23 @@ namespace ToDoList.Controllers
             }
 
             await _context.SaveChangesAsync();
+
+            return _context.ToDos != null ?
+                        PartialView("_ToDoTable", await GetMyToDoesAsync()) :
+                        Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
+        }
+
+        [HttpGet]
+        public IActionResult ChangeListName()
+        {
+            return PartialView("_ChangeListName");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateListName(string newListName)
+        {
+            _listName = newListName;
+            ViewBag._listName = _listName;
 
             return _context.ToDos != null ?
                         PartialView("_ToDoTable", await GetMyToDoesAsync()) :

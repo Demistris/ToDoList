@@ -1,0 +1,11 @@
+﻿<div id="overlay"></div>
+
+<div id="changeListNameForm">
+    <form asp-action="UpdateListName" asp-controller="ToDoes" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv">
+        <div class="form-group">
+            <label for="newListName">New List Name:</label>
+            <input type="text" id="newListName" name="newListName" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>

@@ -41,6 +41,10 @@
       "PackagePath": "staticwebassets\\js\\InputRefresh.js"
     },
     {
+      "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\PopUpActivity.js",
+      "PackagePath": "staticwebassets\\js\\PopUpActivity.js"
+    },
+    {
       "Id": "D:\\AllProjects\\Projects\\ToDoListProject\\ToDoList\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
