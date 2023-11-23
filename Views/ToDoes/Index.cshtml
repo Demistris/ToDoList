@@ -30,10 +30,10 @@
                             <a asp-action="AJAXDeleteAllChecked" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnDeleteAll">Remove all checked items</a>
                         </li>
                         <li>
-                            <a asp-action="AJAXEditAll" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnCheckAll" data-id="1">Check all items</a>
+                            <a asp-action="AJAXEditAll" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnCheckAll" data-id="true">Check all items</a>
                         </li>
                         <li>
-                            <a asp-action="AJAXEditAll" data-ajax="true" data-ajax-method="post" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnCheckAll" data-id="0">Uncheck all items</a>
+                            <a asp-action="AJAXEditAll" data-ajax="true" data-ajax-method="get" data-ajax-mode="replace" data-ajax-update="#tableDiv" class="btnCheckAll" data-id="false">Uncheck all items</a>
                         </li>
                     </ul>
                 </li>

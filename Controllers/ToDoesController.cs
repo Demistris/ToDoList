@@ -219,9 +219,10 @@ namespace ToDoList.Controllers
                         Problem("Entity set 'ApplicationDbContext.ToDos'  is null.");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AJAXEditAll(bool value)
+        [HttpGet]
+        public async Task<IActionResult> AJAXEditAll([FromForm] bool value)
         {
+
             if (_context.ToDos == null)
             {
                 return NotFound();

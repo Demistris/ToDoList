@@ -1,0 +1,180 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+/*Styling for todo items*/
+.CompletedToDo {
+    text-decoration: line-through;
+    color: grey;
+    font-style: italic;
+}
+
+/* Style for the draggable element */
+[draggable="true"] {
+    cursor: move;
+}
+
+/* Style for the dragged element while being dragged */
+[draggable="true"]:active {
+    opacity: 0.7;
+}
+
+/* Style for the drop target */
+[ondragover] {
+    border: 2px dashed #007BFF; /* Change the border color as needed */
+}
+
+/* Style for the drop target when the element is being dragged over it */
+[ondragover]:active {
+    background-color: #f0f0f0; /* Change the background color as needed */
+}
+
+/* Top navbar */
+
+body {
+    padding: 0;
+    margin: 0;
+    font-family: Arial;
+    font-size: 18px;
+}
+.container {
+    width: 100%;
+    margin: auto;
+}
+
+.navbar {
+    background: #55d6aa;
+}
+
+.title {
+    float: left;
+}
+
+.nav {
+    float: right;
+}
+
+    .nav ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+        .nav ul li {
+            display: inline-block;
+        }
+
+            .nav ul li a {
+                text-decoration: none;
+                color: black;
+                padding: 15px;
+                display: block;
+            }
+
+            .nav ul li:hover {
+                background-color: silver;
+            }
+
+        .nav ul ul {
+            display: none;
+            margin: 0;
+            background-color: #55d6aa;
+            position: absolute;
+        }
+
+        .nav ul > li:hover > ul {
+            display: block;
+        }
+
+        .nav ul ul li {
+            display: block;
+            width: 250px;
+        }
+
+            .nav ul ul li a {
+                text-decoration: none;
+                color: black;
+                padding: 15px;
+                display: block;
+                font-size: 14px;
+            }
+
+/* Styling for the pop-up overlay */
+#overlay {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 1000; /* Ensure it's on top of everything */
+}
+
+/* Styling for the pop-up form */
+#changeListNameForm {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center the form */
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    z-index: 1001; /* On top of overlay */
+    max-width: 400px; /* Adjust the width as needed */
+}
+
+    /* Style the form elements */
+    #changeListNameForm label {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    #changeListNameForm input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+
+    #changeListNameForm button {
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+/* Style the button to close the pop-up */
+#closePopupBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    color: #333;
+    text-decoration: none;
+}
+
+/* Additional styles can be added as needed */

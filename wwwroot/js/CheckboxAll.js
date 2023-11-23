@@ -1,30 +1,18 @@
 ﻿$(document).ready(function () {
     $(document).on("click", ".btnCheckAll", function () {
         var id = $(this).data("id");
-        var value;
 
         console.log("id: " + id);
 
-        if (id == 0) {
-            value = false;
-        }
-
-        if (id == 1) {
-            value = true;
-        }
-
-        console.log("Value: " + value);
-
         $.ajax({
-            type: "POST",
+            type: 'GET',
             url: '/ToDoes/AJAXEditAll',
             data: {
-                value: value
+                value: true
             },
             success: function (result) {
                 $('#tableDiv').html(result);
             }
         });
-
     });
 });
