@@ -1,0 +1,7 @@
+﻿.dropzone {
+    min-height: 30rem;
+}
+
+.draggable {
+    cursor: grab;
+}

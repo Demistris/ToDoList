@@ -1,0 +1,16 @@
+﻿@page "/toDoList"
+
+<div class="col-4">
+    <input type="text" placeholder="New item..." @bind-value="_newToDoItem" />
+    <button @onclick="AddNewItem">Add</button>
+
+    <div class="dropzone bg-light p-3 my-3 border border-1 rounded">
+        @foreach (string toDoItem in _toDoList)
+        {
+            <div class="draggable" draggable="true">
+                <input type="checkbox"/>
+                @toDoItem
+            </div>
+        }
+    </div>
+</div>
