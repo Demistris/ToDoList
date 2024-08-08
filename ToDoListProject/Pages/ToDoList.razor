@@ -1,17 +1,25 @@
 ﻿@page "/toDoList"
 @using ToDoListProject.Models
 
-<div class="col-4">
-    <input type="text" placeholder="New item..." @bind-value="_newToDoItem.Description" />
-    <button @onclick="AddNewItem">Add</button>
+<div>
+    <div class="alert alert-light" role="alert">
+        <h3 class="text-center">Todo List</h3>
+    </div>
 
-    <div class="dropzone bg-light p-3 my-3 border border-1 rounded">
+    <form @onsubmit="HandleSubmit" class="input-group">
+        <input type="text" class="form-control" placeholder="New item..." @bind="_newToDoItem.Description" />
+        <button type="submit" class="btn btn-secondary w-100">Add</button>
+    </form>
+
+    <br />
+
+    <ul class="list-group">
         @foreach (ToDoItem toDoItem in _toDos)
         {
-            <div class="draggable" draggable="true">
-                <input type="checkbox" @bind="toDoItem.Completed"/>
-                <span style="@GetTextDecorationStyle(toDoItem)">@toDoItem.Description</span>
-            </div>
+            <li class="list-group-item">
+                <input class="form-check-input me-1" type="checkbox" @bind="toDoItem.Completed" />
+                <label class="form-check-label" for="secondCheckbox" style="@GetTextDecorationStyle(toDoItem)">@toDoItem.Description</label>
+            </li>
         }
-    </div>
+    </ul>
 </div>
