@@ -1,15 +1,16 @@
 ﻿@page "/toDoList"
+@using ToDoListProject.Models
 
 <div class="col-4">
-    <input type="text" placeholder="New item..." @bind-value="_newToDoItem" />
+    <input type="text" placeholder="New item..." @bind-value="_newToDoItem.Description" />
     <button @onclick="AddNewItem">Add</button>
 
     <div class="dropzone bg-light p-3 my-3 border border-1 rounded">
-        @foreach (string toDoItem in _toDoList)
+        @foreach (ToDoItem toDoItem in _toDos)
         {
             <div class="draggable" draggable="true">
-                <input type="checkbox"/>
-                @toDoItem
+                <input type="checkbox" @bind="toDoItem.Completed"/>
+                <span style="@GetTextDecorationStyle(toDoItem)">@toDoItem.Description</span>
             </div>
         }
     </div>

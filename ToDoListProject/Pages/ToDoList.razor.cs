@@ -1,14 +1,24 @@
-﻿namespace ToDoListProject.Pages
+﻿using ToDoListProject.Models;
+
+namespace ToDoListProject.Pages
 {
     public partial class ToDoList
     {
-        private List<string> _toDoList = new List<string>() { "qwe" };
-        private string _newToDoItem = "";
+        private List<ToDoItem> _toDos = new List<ToDoItem>() { new ToDoItem { Description = "Test todo item", Completed = false }, new ToDoItem { Description = "Second todo item", Completed = true } };
+        private ToDoItem _newToDoItem = new() { Description = "", Completed = false };
 
         private void AddNewItem()
         {
-            _toDoList.Add(_newToDoItem);
-            _newToDoItem = "";
+            if(_newToDoItem.Description != null)
+            {
+                _toDos.Add(new ToDoItem { Description = _newToDoItem.Description, Completed = false });
+                _newToDoItem = new() { Description = "", Completed = false };
+            }
+        }
+
+        private string GetTextDecorationStyle(ToDoItem toDoItem)
+        {
+            return toDoItem.Completed ? "text-decoration: line-through;" : "text-decoration: none;";
         }
     }
 }
