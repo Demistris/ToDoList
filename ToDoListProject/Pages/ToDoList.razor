@@ -6,20 +6,30 @@
         <h3 class="text-center">Todo List</h3>
     </div>
 
-    <form @onsubmit="HandleSubmit" class="input-group">
-        <input type="text" class="form-control" placeholder="New item..." @bind="_newToDoItem.Description" />
-        <button type="submit" class="btn btn-secondary w-100">Add</button>
-    </form>
+    <div class="container-fluid">
+        <div class="row">
+            <form @onsubmit="HandleSubmit" class="input-group">
+                <div class="col-10 p-0">
+                    <input type="text" class="form-control" placeholder="New item..." @bind="_newToDoItem.Description" />
+                </div>
+                <div class="col-2 p-0">
+                    <button type="submit" class="btn btn-secondary w-100">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <br />
 
     <ul class="list-group">
-        @foreach (ToDoItem toDoItem in _toDos)
+        @foreach (ToDoItem toDoItem in _uncompletedToDoItems)
         {
-            <li class="list-group-item">
-                <input class="form-check-input me-1" type="checkbox" @bind="toDoItem.Completed" />
-                <label class="form-check-label" for="secondCheckbox" style="@GetTextDecorationStyle(toDoItem)">@toDoItem.Description</label>
-            </li>
+            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" @key="toDoItem.Id" />
+        }
+        
+        @foreach (ToDoItem toDoItem in _completedToDoItems)
+        {
+            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" @key="toDoItem.Id" />
         }
     </ul>
 </div>
