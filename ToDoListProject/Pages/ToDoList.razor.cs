@@ -31,42 +31,67 @@ namespace ToDoListProject.Pages
 
         private void AddNewItem()
         {
-            if(!String.IsNullOrEmpty(_newToDoItem.Description))
+            if(string.IsNullOrWhiteSpace(_newToDoItem.Description))
             {
-                _uncompletedToDoItems.Add(new ToDoItem { Description = _newToDoItem.Description, Completed = false });
-                _newToDoItem = new() { Description = "", Completed = false };
+                return;
             }
+
+            var newItem = new ToDoItem
+            {
+                Id = GenerateUniqueId(),
+                Description = _newToDoItem.Description,
+                Completed = false
+            };
+
+            _uncompletedToDoItems.Add(newItem);
+            _newToDoItem.Description = string.Empty;
+        }
+
+        private int GenerateUniqueId()
+        {
+            // Check if either list is not empty before calling Max()
+            var allItems = _uncompletedToDoItems.Concat(_completedToDoItems);
+            if (allItems.Any())
+            {
+                // Get the maximum ID from the combined list of items
+                return allItems.Max(x => x.Id) + 1;
+            }
+
+            // Return 1 if no items are present
+            return 1;
         }
 
         private void UpdateItemCompletionStatus(ToDoItem toDoItem)
         {
-            if(toDoItem != null)
+            if(toDoItem == null)
             {
-                if (toDoItem.Completed)
-                {
-                    if (_uncompletedToDoItems.Contains(toDoItem))
-                    {
-                        _uncompletedToDoItems.Remove(toDoItem);
-                    }
-                    if (!_completedToDoItems.Contains(toDoItem))
-                    {
-                        _completedToDoItems.Insert(0, toDoItem);
-                    }
-                }
-                else
-                {
-                    if (_completedToDoItems.Contains(toDoItem))
-                    {
-                        _completedToDoItems.Remove(toDoItem);
-                    }
-                    if (!_uncompletedToDoItems.Contains(toDoItem))
-                    {
-                        _uncompletedToDoItems.Insert(0, toDoItem);
-                    }
-                }
-
-                StateHasChanged();
+                return;
             }
+
+            if (toDoItem.Completed)
+            {
+                if (_uncompletedToDoItems.Contains(toDoItem))
+                {
+                    _uncompletedToDoItems.Remove(toDoItem);
+                }
+                if (!_completedToDoItems.Contains(toDoItem))
+                {
+                    _completedToDoItems.Insert(0, toDoItem);
+                }
+            }
+            else
+            {
+                if (_completedToDoItems.Contains(toDoItem))
+                {
+                    _completedToDoItems.Remove(toDoItem);
+                }
+                if (!_uncompletedToDoItems.Contains(toDoItem))
+                {
+                    _uncompletedToDoItems.Insert(0, toDoItem);
+                }
+            }
+
+            StateHasChanged();
         }
     }
 }
