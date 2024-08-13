@@ -24,12 +24,12 @@
     <ul class="list-group">
         @foreach (ToDoItem toDoItem in _uncompletedToDoItems)
         {
-            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" @key="toDoItem.Id" />
+            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" @key="toDoItem.Id" />
         }
         
         @foreach (ToDoItem toDoItem in _completedToDoItems)
         {
-            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" @key="toDoItem.Id" />
+            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" @key="toDoItem.Id" />
         }
     </ul>
 </div>

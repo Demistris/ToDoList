@@ -93,5 +93,19 @@ namespace ToDoListProject.Pages
 
             StateHasChanged();
         }
+
+        private void HandleDeleteItem(ToDoItem toDoItem)
+        {
+            if(toDoItem.Completed)
+            {
+                _completedToDoItems.Remove(toDoItem);
+            }
+            else
+            {
+                _uncompletedToDoItems.Remove(toDoItem);
+            }
+
+            StateHasChanged();
+        }
     }
 }
