@@ -1,0 +1,11 @@
+﻿<div id="sortableList">
+    @foreach(var item in Items)
+    {
+        <div class="toDo-item" @key="item.Id">
+            @if(SortableItem != null)
+            {
+                @SortableItem(item);
+            }
+        </div>
+    }
+</div>

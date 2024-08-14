@@ -6,7 +6,10 @@ namespace ToDoListProject.Pages
 {
     public partial class ToDoList
     {
-        private List<ToDoItem> _uncompletedToDoItems = new();
+        public event Action? OnChange;
+        private void NotifyStateChanged() => OnChange?.Invoke();
+
+        public List<ToDoItem> _uncompletedToDoItems = [];
         private List<ToDoItem> _completedToDoItems = [];
 
         private ToDoItem _newToDoItem = new() { Description = "", Completed = false };
@@ -15,13 +18,31 @@ namespace ToDoListProject.Pages
         {
             _uncompletedToDoItems =
             [
-                new ToDoItem { Id = 1, Description = "Task 1", Completed = false },
-                new ToDoItem { Id = 2, Description = "Task 2", Completed = false }
+                new ToDoItem { Description = "Task 1", Completed = false },
+                new ToDoItem { Description = "Task 2", Completed = false }
             ];
             _completedToDoItems =
             [
-                new ToDoItem { Id = 3, Description = "Task 3", Completed = true }
+                new ToDoItem { Description = "Task 3", Completed = true }
             ];
+        }
+
+        public void ReorderToDos(int oldIndex, int newIndex)
+        {
+            var toDos = _uncompletedToDoItems;
+            var itemToMove = toDos[oldIndex];
+            toDos.RemoveAt(oldIndex);
+
+            if (oldIndex < toDos.Count)
+            {
+                toDos.Insert(newIndex, itemToMove);
+            }
+            else
+            {
+                toDos.Add(itemToMove);
+            }
+
+            NotifyStateChanged();
         }
 
         private void HandleSubmit()
@@ -31,14 +52,13 @@ namespace ToDoListProject.Pages
 
         private void AddNewItem()
         {
-            if(string.IsNullOrWhiteSpace(_newToDoItem.Description))
+            if (string.IsNullOrWhiteSpace(_newToDoItem.Description))
             {
                 return;
             }
 
             var newItem = new ToDoItem
             {
-                Id = GenerateUniqueId(),
                 Description = _newToDoItem.Description,
                 Completed = false
             };
@@ -47,23 +67,9 @@ namespace ToDoListProject.Pages
             _newToDoItem.Description = string.Empty;
         }
 
-        private int GenerateUniqueId()
-        {
-            // Check if either list is not empty before calling Max()
-            var allItems = _uncompletedToDoItems.Concat(_completedToDoItems);
-            if (allItems.Any())
-            {
-                // Get the maximum ID from the combined list of items
-                return allItems.Max(x => x.Id) + 1;
-            }
-
-            // Return 1 if no items are present
-            return 1;
-        }
-
         private void UpdateItemCompletionStatus(ToDoItem toDoItem)
         {
-            if(toDoItem == null)
+            if (toDoItem == null)
             {
                 return;
             }
@@ -91,12 +97,12 @@ namespace ToDoListProject.Pages
                 }
             }
 
-            StateHasChanged();
+            NotifyStateChanged();
         }
 
         private void HandleDeleteItem(ToDoItem toDoItem)
         {
-            if(toDoItem.Completed)
+            if (toDoItem.Completed)
             {
                 _completedToDoItems.Remove(toDoItem);
             }
@@ -105,7 +111,7 @@ namespace ToDoListProject.Pages
                 _uncompletedToDoItems.Remove(toDoItem);
             }
 
-            StateHasChanged();
+            NotifyStateChanged();
         }
     }
 }
