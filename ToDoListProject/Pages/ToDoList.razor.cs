@@ -29,7 +29,16 @@ namespace ToDoListProject.Pages
 
         public void ReorderToDos(int oldIndex, int newIndex)
         {
+            Console.WriteLine($"_uncompletedToDoItems.Count: {_uncompletedToDoItems.Count}");
+
             var toDos = _uncompletedToDoItems;
+
+            if (oldIndex < 0 || oldIndex >= toDos.Count || newIndex < 0 || newIndex >= toDos.Count)
+            {
+                Console.WriteLine($"Invalid indices: oldIndex={oldIndex}, newIndex={newIndex}");
+                return;
+            }
+
             var itemToMove = toDos[oldIndex];
             toDos.RemoveAt(oldIndex);
 

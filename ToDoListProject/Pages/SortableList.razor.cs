@@ -35,6 +35,8 @@ namespace ToDoListProject.Pages
         [JSInvokable]
         public void Drop(int oldIndex, int newIndex)
         {
+            Console.WriteLine($"ToDoList._uncompletedToDoItems.Count: {ToDoList._uncompletedToDoItems.Count}");
+
             ToDoList.ReorderToDos(oldIndex, newIndex);
         }
     }
