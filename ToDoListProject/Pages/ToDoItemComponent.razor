@@ -1,8 +1,8 @@
 ﻿@inherits ComponentBase
 
-<li class="list-group-item" ondragover="event.preventDefault()" @ondrop="OnDropHandler">
+<li class="list-group-item">
 
-    <span class="drag-handle" draggable="true" @ondragstart="@(() => OnStartDragHandler(Item))"><i class="fa-solid fa-grip-vertical"></i></span>
+    <span class="drag-handle"><i class="fa-solid fa-grip-vertical"></i></span>
     <input class="form-check-input me-1" type="checkbox" checked="@Item.Completed" @onchange="HandleCheckboxChange" />
 
     @if(_isEditing)

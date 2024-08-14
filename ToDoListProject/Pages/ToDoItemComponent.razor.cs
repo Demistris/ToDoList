@@ -12,10 +12,6 @@ namespace ToDoListProject.Pages
         public EventCallback<ToDoItem> OnItemChanged { get; set; }
         [Parameter]
         public EventCallback<ToDoItem> OnDelete { get; set; }
-        [Parameter]
-        public EventCallback<ToDoItem> OnStartDrag { get; set; }
-        [Parameter]
-        public EventCallback<ToDoItem> OnDrop { get; set; }
         private bool _isEditing;
 
         private async Task HandleCheckboxChange(ChangeEventArgs e)
@@ -55,16 +51,6 @@ namespace ToDoListProject.Pages
         private async Task DeleteItem()
         {
             await OnDelete.InvokeAsync(Item);
-        }
-
-        private async Task OnStartDragHandler(ToDoItem toDoItem)
-        {
-            await OnStartDrag.InvokeAsync(toDoItem);
-        }
-
-        private async Task OnDropHandler()
-        {
-            await OnDrop.InvokeAsync(Item);
         }
     }
 }
