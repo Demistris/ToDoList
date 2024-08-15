@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components.Web;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Components.Web;
 using System.Collections.Generic;
 using ToDoListProject.Models;
 
@@ -16,8 +18,15 @@ namespace ToDoListProject.Pages
 
         public ToDoList()
         {
-            _uncompletedToDoItems = new List<ToDoItem>();
-            _completedToDoItems = new List<ToDoItem>();
+            _uncompletedToDoItems = new List<ToDoItem>() 
+            { 
+                new ToDoItem { Description = "Task 1", Completed = false}, 
+                new ToDoItem { Description = "Task 2", Completed = false } 
+            };
+            _completedToDoItems = new List<ToDoItem>()
+            {
+                new ToDoItem { Description = "Task 3", Completed = true}
+            };
         }
 
         public void ReorderToDos(int oldIndex, int newIndex)
@@ -43,7 +52,7 @@ namespace ToDoListProject.Pages
             AddNewItem();
         }
 
-        private void AddNewItem()
+        private async void AddNewItem()
         {
             if (string.IsNullOrWhiteSpace(_newToDoItem.Description))
             {

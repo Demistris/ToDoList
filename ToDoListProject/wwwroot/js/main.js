@@ -6,8 +6,8 @@
                 forceFallback: true,
                 animation: 350,
                 onUpdate: (event) => {
-                    //event.item.remove();
-                    //event.to.insertBefore(event.item, event.to.children[event.oldIndex]);
+                    event.item.remove();
+                    event.to.insertBefore(event.item, event.to.children[event.oldIndex]);
 
                     component.invokeMethodAsync("Drop", event.oldDraggableIndex, event.newDraggableIndex);
                 }

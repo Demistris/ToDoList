@@ -22,20 +22,20 @@
     <br />
 
     <ul class="list-group">
-        @* @foreach (ToDoItem toDoItem in _uncompletedToDoItems)
-        {
-            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" @key="toDoItem.Id" />
-        }
-        
-        @foreach (ToDoItem toDoItem in _completedToDoItems)
+@*         @foreach (ToDoItem toDoItem in _uncompletedToDoItems)
         {
             <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" @key="toDoItem.Id" />
         } *@
-
         <SortableList Items="_uncompletedToDoItems" Context="toDo">
             <SortableItem>
                 <ToDoItemComponent Item="toDo" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" />
             </SortableItem>
         </SortableList>
+
+        @foreach (ToDoItem toDoItem in _completedToDoItems)
+        {
+            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" @key="toDoItem.Id" />
+        }
+
     </ul>
 </div>
