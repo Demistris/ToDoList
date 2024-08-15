@@ -8,7 +8,12 @@ namespace ToDoListProject.Pages
     public partial class SortableList
     {
         [Parameter, AllowNull]
-        public List<ToDoItem> Items { get; set; }
+        public List<ToDoItem> Items
+        {
+            get => ToDoList._uncompletedToDoItems;
+            set => ToDoList._uncompletedToDoItems = value;
+        }
+
         [Parameter]
         public RenderFragment<ToDoItem>? SortableItem { get; set; }
 
@@ -35,8 +40,6 @@ namespace ToDoListProject.Pages
         [JSInvokable]
         public void Drop(int oldIndex, int newIndex)
         {
-            Console.WriteLine($"ToDoList._uncompletedToDoItems.Count: {ToDoList._uncompletedToDoItems.Count}");
-
             ToDoList.ReorderToDos(oldIndex, newIndex);
         }
     }

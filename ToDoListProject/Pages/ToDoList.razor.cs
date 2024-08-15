@@ -14,31 +14,15 @@ namespace ToDoListProject.Pages
 
         private ToDoItem _newToDoItem = new() { Description = "", Completed = false };
 
-        protected override void OnInitialized()
+        public ToDoList()
         {
-            _uncompletedToDoItems =
-            [
-                new ToDoItem { Description = "Task 1", Completed = false },
-                new ToDoItem { Description = "Task 2", Completed = false }
-            ];
-            _completedToDoItems =
-            [
-                new ToDoItem { Description = "Task 3", Completed = true }
-            ];
+            _uncompletedToDoItems = new List<ToDoItem>();
+            _completedToDoItems = new List<ToDoItem>();
         }
 
         public void ReorderToDos(int oldIndex, int newIndex)
         {
-            Console.WriteLine($"_uncompletedToDoItems.Count: {_uncompletedToDoItems.Count}");
-
             var toDos = _uncompletedToDoItems;
-
-            if (oldIndex < 0 || oldIndex >= toDos.Count || newIndex < 0 || newIndex >= toDos.Count)
-            {
-                Console.WriteLine($"Invalid indices: oldIndex={oldIndex}, newIndex={newIndex}");
-                return;
-            }
-
             var itemToMove = toDos[oldIndex];
             toDos.RemoveAt(oldIndex);
 
@@ -74,6 +58,8 @@ namespace ToDoListProject.Pages
 
             _uncompletedToDoItems.Add(newItem);
             _newToDoItem.Description = string.Empty;
+
+            NotifyStateChanged();
         }
 
         private void UpdateItemCompletionStatus(ToDoItem toDoItem)

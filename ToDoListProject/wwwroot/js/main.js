@@ -2,7 +2,7 @@
     sortable: {
         init: function (id, component) {
             new Sortable(document.getElementById(id), {
-                handle: ".drag-handle",
+                handle: ".toDo-drag-handle",
                 forceFallback: true,
                 animation: 350,
                 onUpdate: (event) => {
