@@ -1,7 +1,7 @@
 ﻿<div id="sortableList">
     @foreach(var item in Items)
     {
-        <div class="toDo-item" @key="item.Id">
+        <div class="toDo-item no-select" @key="item.Id">
             @if(SortableItem != null)
             {
                 @SortableItem(item);

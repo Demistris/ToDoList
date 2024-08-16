@@ -5,3 +5,10 @@
 .sortable-fallback{
     opacity: 1 !important;
 }
+
+.no-select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
