@@ -1,36 +1,45 @@
-﻿@page "/toDoList"
+﻿@page "/toDoList/{ListId}"
 @using ToDoListProject.Models
+@inject ToDoListManager ListManager
+@implements IDisposable
 
-<div>
-    <div class="alert alert-light" role="alert">
-        <h3 class="text-center">Todo List</h3>
-    </div>
-
-    <div class="container-fluid">
-        <div class="row">
-            <form @onsubmit="HandleSubmit" class="input-group">
-                <div class="col-10 p-0">
-                    <input type="text" class="form-control" placeholder="New item..." @bind="_newToDoItem.Description" />
-                </div>
-                <div class="col-2 p-0">
-                    <button type="submit" class="btn btn-secondary w-100">Add</button>
-                </div>
-            </form>
+<div >
+    @if (_listModel == null)
+    {
+        <p>List not found!</p>
+    }
+    else
+    {
+        <div class="alert alert-light" role="alert">
+            <h3 class="text-center">@_listModel.ListName</h3>
         </div>
-    </div>
 
-    <br />
+        <div class="container-fluid">
+            <div class="row">
+                <form @onsubmit="AddNewItem" class="input-group">
+                    <div class="col-10 p-0">
+                        <input type="text" class="form-control" placeholder="New item..." @bind="_newToDoItem.Description" />
+                    </div>
+                    <div class="col-2 p-0">
+                        <button type="submit" class="btn btn-secondary w-100">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-    <ul class="list-group">
-        <SortableList Items="_uncompletedToDoItems" Context="toDo">
-            <SortableItem>
-                <ToDoItemComponent Item="toDo" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" />
-            </SortableItem>
-        </SortableList>
+        <br />
 
-        @foreach (ToDoItem toDoItem in _completedToDoItems)
-        {
-            <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" @key="toDoItem.Id" />
-        }
-    </ul>
+        <ul class="list-group">
+            <SortableList Items="_uncompletedToDoItems" Context="toDo">
+                <SortableItem>
+                    <ToDoItemComponent Item="toDo" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" />
+                </SortableItem>
+            </SortableList>
+
+            @foreach (ToDoItem toDoItem in _completedToDoItems)
+            {
+                <ToDoItemComponent Item="toDoItem" OnItemChanged="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" @key="toDoItem.Id" />
+            }
+        </ul>
+    }
 </div>

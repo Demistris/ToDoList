@@ -1,0 +1,24 @@
+﻿@page "/manageLists"
+@using ToDoListProject.Models
+
+<h3>To-Do List Manager</h3>
+
+<div>
+    <label for="newListName">New List Name:</label>
+    <input type="text" id="newListName" @bind="_newListName" />
+    <button @onclick="CreateNewList">Add List</button>
+</div>
+
+<ul>
+    @foreach (var list in _toDoLists)
+    {
+        <li @onclick="() => SelectList(list)">
+            @list.ListName
+        </li>
+    }
+</ul>
+
+@if (_selectedList != null)
+{
+    <ToDoList _listModel="selectedList" />
+}

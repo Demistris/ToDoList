@@ -8,12 +8,7 @@ namespace ToDoListProject.Pages
     public partial class SortableList
     {
         [Parameter, AllowNull]
-        public List<ToDoItem> Items
-        {
-            get => ToDoList._uncompletedToDoItems;
-            set => ToDoList._uncompletedToDoItems = value;
-        }
-
+        public List<ToDoItem> Items { get; set; }
         [Parameter]
         public RenderFragment<ToDoItem>? SortableItem { get; set; }
 
