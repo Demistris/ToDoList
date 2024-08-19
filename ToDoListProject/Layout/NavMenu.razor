@@ -1,5 +1,7 @@
 ﻿@using ToDoListProject.Pages
-@inject ToDoListManager ListManager
+@inject ToDoService ToDoService
+@inject ToDoListManager ToDoListManager
+@inject NavigationManager NavigationManager
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -23,22 +25,19 @@
                 <span class="oi oi-list" aria-hidden="true"></span> Manage Lists
             </NavLink>
         </div>
-        
-        @* <div class="nav-item px-3">
-            <NavLink class="nav-link" href="manageLists" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Manage Lists
-            </NavLink>
-        </div> *@
 
-@*         @foreach (var list in ListManager.ToDoLists)
+        @foreach (var list in ToDoService.GetAllLists())
         {
             <div class="nav-item px-3">
-                <NavLink class="nav-link" @onclick="() => NavigateToList(list.Id)">
-                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> @list.ListName
+                <NavLink href="@($"/list/{list.Id}")" class="nav-link">
+                    <span class="oi oi-list-rich" aria-hidden="true"></span> @list.ListName
                 </NavLink>
             </div>
-        } *@
-        @* <button @onclick="ListManager.CreateNewList">+ Add new list</button> *@
+        }
+
+        <div class="nav-item px-3">
+            <button class="btn btn-primary" @onclick="ToDoListManager.AddList">Add List</button>
+        </div>
     </nav>
 </div>
 

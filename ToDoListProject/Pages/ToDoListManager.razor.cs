@@ -16,16 +16,21 @@ namespace ToDoListProject.Pages
             StateHasChanged();
         }
 
-        private void AddList()
+        public void AddList()
         {
+            _newListName = "Untitled";
+
             if (!string.IsNullOrWhiteSpace(_newListName))
             {
                 var newList = ToDoService.AddList(_newListName);
                 _newListName = "";
+                
                 if (newList != null)
                 {
                     SelectList(newList);
                 }
+
+                NavigationManager.NavigateTo($"/list/{newList.Id}");
                 StateHasChanged();
             }
         }
@@ -33,6 +38,7 @@ namespace ToDoListProject.Pages
         private void DeleteList(ToDoListModel list)
         {
             ToDoService.DeleteList(list.Id);
+            //NavigationManager.NavigateTo("/lists", forceLoad: true);
 
             if (_selectedList?.Id == list.Id)
             {

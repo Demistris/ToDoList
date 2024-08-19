@@ -7,15 +7,16 @@ namespace ToDoListProject.Pages
         public List<ToDoListModel> GetAllLists() => _toDoLists;
 
         private List<ToDoListModel> _toDoLists = new List<ToDoListModel>();
+        private bool _isEditing;
 
         public ToDoListModel AddList(string name)
         {
-            if (_toDoLists.Any(l => l.ListName == name))
-            {
-                return null;
-            }
+            //if (_toDoLists.Any(l => l.ListName == name))
+            //{
+            //    return null;
+            //}
 
-            var newList = new ToDoListModel { ListName = name };
+            var newList = new ToDoListModel { ListName = $"{name}{_toDoLists.Count + 1}" };
             _toDoLists.Add(newList);
             return newList;
         }
@@ -38,6 +39,11 @@ namespace ToDoListProject.Pages
         public ToDoListModel GetList(string listId)
         {
             return _toDoLists.FirstOrDefault(l => l.Id == listId);
+        }
+
+        private void EditListName()
+        {
+            _isEditing = true;
         }
     }
 }
