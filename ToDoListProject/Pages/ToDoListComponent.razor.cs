@@ -28,7 +28,6 @@ namespace ToDoListProject.Pages
             if (ToDoListModel == null)
             {
                 Console.WriteLine($"List with ID {ListId} not found.");
-                // Instead of navigating, we'll just return and let the parent component handle it
                 return;
             }
 
