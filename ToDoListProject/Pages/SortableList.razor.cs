@@ -5,23 +5,18 @@ using ToDoListProject.Models;
 
 namespace ToDoListProject.Pages
 {
-    public partial class SortableList
+    public partial class SortableList<TItem>
     {
         [Parameter, AllowNull]
-        public List<ToDoItem> Items { get; set; }
-        [Parameter]
-        public RenderFragment<ToDoItem>? SortableItem { get; set; }
+        public List<TItem> Items { get; set; }
+        [Parameter] 
+        public RenderFragment<TItem> ItemTemplate { get; set; }
+        [Parameter] 
+        public EventCallback<(int OldIndex, int NewIndex)> OnReorder { get; set; }
 
-        private DotNetObjectReference<SortableList>? _selfReference;
+        private DotNetObjectReference<SortableList<TItem>>? _selfReference;
         [Inject]
         private IJSRuntime JS { get; set; }
-        [Inject]
-        private ToDoList ToDoList { get; set; }
-
-        protected override void OnInitialized()
-        {
-            ToDoList.OnChange += StateHasChanged;
-        }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -33,9 +28,14 @@ namespace ToDoListProject.Pages
         }
 
         [JSInvokable]
-        public void Drop(int oldIndex, int newIndex)
+        public async Task Drop(int oldIndex, int newIndex)
         {
-            ToDoList.ReorderToDos(oldIndex, newIndex);
+            await OnReorder.InvokeAsync((oldIndex, newIndex));
+        }
+
+        public void Dispose()
+        {
+            _selfReference?.Dispose();
         }
     }
 }

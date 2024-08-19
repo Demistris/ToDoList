@@ -1,24 +1,32 @@
-﻿@page "/manageLists"
-@using ToDoListProject.Models
+﻿@page "/lists"
+@inject ToDoService ToDoService
 
-<h3>To-Do List Manager</h3>
-
-<div>
-    <label for="newListName">New List Name:</label>
-    <input type="text" id="newListName" @bind="_newListName" />
-    <button @onclick="CreateNewList">Add List</button>
+<h1>To-Do Lists</h1>
+<div class="row">
+    <div class="col-md-4">
+        <h2>Lists</h2>
+        <ul class="list-group">
+            @foreach (var list in ToDoService.GetAllLists())
+            {
+                <li class="list-group-item @(_selectedList?.Id == list.Id ? "active" : "")">
+                    <a href="@($"/list/{list.Id}")" class="text-dark text-decoration-none">@list.ListName</a>
+                    <button class="btn btn-danger btn-sm float-end" @onclick="() => DeleteList(list)">Delete</button>
+                </li>
+            }
+        </ul>
+        <div class="mt-3">
+            <input @bind="_newListName" placeholder="New list name" />
+            <button class="btn btn-primary" @onclick="AddList">Add List</button>
+        </div>
+    </div>
+    <div class="col-md-8">
+        @if (_selectedList != null)
+        {
+            <ToDoListComponent ListId="@_selectedList.Id" ToDoListModel="@_selectedList" OnListUpdate="UpdateList" />
+        }
+        else
+        {
+            <div>No list selected</div>
+        }
+    </div>
 </div>
-
-<ul>
-    @foreach (var list in _toDoLists)
-    {
-        <li @onclick="() => SelectList(list)">
-            @list.ListName
-        </li>
-    }
-</ul>
-
-@if (_selectedList != null)
-{
-    <ToDoList _listModel="selectedList" />
-}

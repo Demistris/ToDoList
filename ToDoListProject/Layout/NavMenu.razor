@@ -1,5 +1,4 @@
 ﻿@using ToDoListProject.Pages
-@inject NavigationManager NavigationManager
 @inject ToDoListManager ListManager
 
 <div class="top-row ps-3 navbar navbar-dark">
@@ -18,22 +17,28 @@
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
             </NavLink>
         </div>
-        
+
         <div class="nav-item px-3">
+            <NavLink class="nav-link" href="lists">
+                <span class="oi oi-list" aria-hidden="true"></span> Manage Lists
+            </NavLink>
+        </div>
+        
+        @* <div class="nav-item px-3">
             <NavLink class="nav-link" href="manageLists" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Manage Lists
             </NavLink>
-        </div>
+        </div> *@
 
-        @foreach (var list in ListManager.ToDoLists)
+@*         @foreach (var list in ListManager.ToDoLists)
         {
             <div class="nav-item px-3">
                 <NavLink class="nav-link" @onclick="() => NavigateToList(list.Id)">
                     <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> @list.ListName
                 </NavLink>
             </div>
-        }
-        <button @onclick="ListManager.CreateNewList">+ Add new list</button>
+        } *@
+        @* <button @onclick="ListManager.CreateNewList">+ Add new list</button> *@
     </nav>
 </div>
 
@@ -44,10 +49,5 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
-    }
-
-    private void NavigateToList(string listId)
-    {
-        NavigationManager.NavigateTo($"/toDoList/{listId}", forceLoad: true);
     }
 }

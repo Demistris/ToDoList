@@ -1,11 +1,10 @@
-﻿<div id="sortableList">
-    @foreach(var item in Items)
+﻿@typeparam TItem
+
+<ul id="sortableList" class="list-group">
+    @foreach (var item in Items)
     {
-        <div class="toDo-item no-select" @key="item.Id">
-            @if(SortableItem != null)
-            {
-                @SortableItem(item);
-            }
-        </div>
+        <li class="toDo-item no-select">
+            @ItemTemplate(item)
+        </li>
     }
-</div>
+</ul>
