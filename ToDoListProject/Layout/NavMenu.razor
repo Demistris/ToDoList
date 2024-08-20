@@ -44,8 +44,6 @@
                     }
                     else
                     {
-                        @* <span>@list.ListName</span> *@
-                        @* <span>@(list.Id == _editingListId ? _editingListName : _selectedListName)</span> *@
                         <span>@(list.Id == _editingListId ? _editingListName : list.ListName)</span>
                     }
                 </NavLink>

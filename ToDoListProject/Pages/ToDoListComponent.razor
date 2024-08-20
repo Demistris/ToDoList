@@ -39,7 +39,7 @@
         <ul class="list-group">
             <SortableList Items="_uncompletedToDoItems" OnReorder="HandleReorder">
                 <ItemTemplate Context="toDo">
-                    <ToDoItemComponent Item="toDo" OnUpdate="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" />
+                    <ToDoItemComponent Item="toDo" OnUpdate="UpdateItemCompletionStatus" OnDelete="HandleDeleteItem" @key="toDo.Id" />
                 </ItemTemplate>
             </SortableList>
 
