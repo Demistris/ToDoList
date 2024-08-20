@@ -29,6 +29,16 @@
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="js/sortable.min.js"></script>
     <script src="js/main.js"></script>
+    <script>
+        window.focusNewInput = (listId) => {
+            setTimeout(() => {
+                const input = document.querySelector(`[data-list-id="${listId}"] input`);
+                if (input) {
+                    input.focus();
+                }
+            }, 0);
+        };
+    </script>
 </body>
 
 </html>

@@ -17,24 +17,18 @@ namespace ToDoListProject.Pages
         private List<ToDoItem> _completedToDoItems = [];
         private ToDoItem _newToDoItem = new() { Description = "", Completed = false };
 
-        protected override void OnInitialized()
+        protected override void OnParametersSet()
         {
-            Console.WriteLine($"ToDoListComponent initialized with ID: {ListId ?? ToDoListModel?.Id}");
-            if (ToDoListModel == null && !string.IsNullOrEmpty(ListId))
+            if (!string.IsNullOrEmpty(ListId))
             {
                 ToDoListModel = ToDoService.GetList(ListId);
+
+                if (ToDoListModel != null)
+                {
+                    _uncompletedToDoItems = ToDoListModel.Items.Where(i => !i.Completed).ToList();
+                    _completedToDoItems = ToDoListModel.Items.Where(i => i.Completed).ToList();
+                }
             }
-
-            if (ToDoListModel == null)
-            {
-                Console.WriteLine($"List with ID {ListId} not found.");
-                return;
-            }
-
-            _uncompletedToDoItems = ToDoListModel.Items.Where(i => !i.Completed).ToList();
-            _completedToDoItems = ToDoListModel.Items.Where(i => i.Completed).ToList();
-
-            StateHasChanged();
         }
 
         private void AddNewItem()

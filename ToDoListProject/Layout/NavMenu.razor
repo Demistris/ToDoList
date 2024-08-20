@@ -1,7 +1,9 @@
-﻿@using ToDoListProject.Pages
+﻿@using ToDoListProject.Models
+@using ToDoListProject.Pages
 @inject ToDoService ToDoService
 @inject ToDoListManager ToDoListManager
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JS
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -25,18 +27,30 @@
                 <span class="oi oi-list" aria-hidden="true"></span> Manage Lists
             </NavLink>
         </div>
-
         @foreach (var list in ToDoService.GetAllLists())
         {
-            <div class="nav-item px-3">
+            <div class="nav-item px-3" data-list-id="@list.Id">
                 <NavLink href="@($"/list/{list.Id}")" class="nav-link">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span> @list.ListName
+                    <span class="oi oi-list-rich" aria-hidden="true"></span>
+
+                    @if (_editingListId == list.Id)
+                    {
+                        <input @bind="_editingListName"
+                               @bind:event="oninput"
+                               @onkeydown="@(e => HandleKeyDown(e, list))"
+                               @onfocusout="@(() => FinishEditing(list))"
+                               style="width: 120px;" />
+                    }
+                    else
+                    {
+                        <span>@list.ListName</span>
+                    }
                 </NavLink>
             </div>
         }
 
         <div class="nav-item px-3">
-            <button class="btn btn-primary" @onclick="ToDoListManager.AddList">Add List</button>
+            <button class="btn btn-primary" @onclick="AddNewList">Add List</button>
         </div>
     </nav>
 </div>
@@ -45,8 +59,65 @@
     private bool collapseNavMenu = true;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    private string _editingListId;
+    private string _editingListName;
+
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task HandleKeyDown(KeyboardEventArgs e, ToDoListModel list)
+    {
+        if (e.Key == "Enter")
+        {
+            await FinishEditing(list);
+        }
+    }
+
+    private async Task FinishEditing(ToDoListModel list)
+    {
+        if (string.IsNullOrWhiteSpace(_editingListName))
+        {
+            _editingListName = GenerateUntitledName();
+        }
+
+        list.ListName = _editingListName;
+        _editingListId = null;
+        await ToDoService.UpdateList(list);
+        NavigationManager.NavigateTo($"/list/{list.Id}");
+        StateHasChanged();
+    }
+
+    private string GenerateUntitledName()
+    {
+        int counter = 1;
+        string baseName = "Untitled";
+        string newName;
+        do
+        {
+            newName = $"{baseName}{counter}";
+            counter++;
+        } while (ToDoService.GetAllLists().Any(l => l.ListName == newName));
+        return newName;
+    }
+
+    private async Task AddNewList()
+    {
+        var newList = await ToDoListManager.AddList();
+
+        if (newList != null)
+        {
+            _editingListId = newList.Id;
+            _editingListName = "";
+            StateHasChanged();
+            await Task.Delay(50);
+            await FocusNewInput(newList.Id);
+        }
+    }
+
+    private async Task FocusNewInput(string listId)
+    {
+        await JS.InvokeAsync<object>("focusNewInput", listId);
     }
 }

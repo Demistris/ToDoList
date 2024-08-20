@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using ToDoListProject.Models;
 
 namespace ToDoListProject.Pages
@@ -9,30 +10,32 @@ namespace ToDoListProject.Pages
         private ToDoListModel _selectedList;
         private string _newListName = "";
 
-        private void SelectList(ToDoListModel list)
+        private async Task SelectListAsync(ToDoListModel list)
         {
-            Console.WriteLine($"Selecting list with ID: {list?.Id}");
             _selectedList = list;
             StateHasChanged();
+            await Task.CompletedTask;
         }
 
-        public void AddList()
+        public async Task<ToDoListModel> AddList()
         {
             _newListName = "Untitled";
 
             if (!string.IsNullOrWhiteSpace(_newListName))
             {
-                var newList = ToDoService.AddList(_newListName);
+                var newList = await ToDoService.AddListAsync(_newListName);
                 _newListName = "";
-                
+
                 if (newList != null)
                 {
-                    SelectList(newList);
+                    await SelectListAsync(newList);
                 }
 
-                NavigationManager.NavigateTo($"/list/{newList.Id}");
                 StateHasChanged();
+                return newList;
             }
+
+            return null;
         }
 
         private void DeleteList(ToDoListModel list)

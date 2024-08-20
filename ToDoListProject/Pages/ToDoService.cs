@@ -7,17 +7,17 @@ namespace ToDoListProject.Pages
         public List<ToDoListModel> GetAllLists() => _toDoLists;
 
         private List<ToDoListModel> _toDoLists = new List<ToDoListModel>();
-        private bool _isEditing;
 
-        public ToDoListModel AddList(string name)
+        public async Task<ToDoListModel> AddListAsync(string listName)
         {
-            //if (_toDoLists.Any(l => l.ListName == name))
-            //{
-            //    return null;
-            //}
+            var newList = new ToDoListModel
+            {
+                ListName = listName,
+                Items = new List<ToDoItem>()
+            };
 
-            var newList = new ToDoListModel { ListName = $"{name}{_toDoLists.Count + 1}" };
             _toDoLists.Add(newList);
+            await Task.CompletedTask;
             return newList;
         }
 
@@ -26,7 +26,7 @@ namespace ToDoListProject.Pages
             _toDoLists.RemoveAll(l => l.Id == listId);
         }
 
-        public void UpdateList(ToDoListModel updatedList)
+        public async Task UpdateList(ToDoListModel updatedList)
         {
             var index = _toDoLists.FindIndex(l => l.Id == updatedList.Id);
 
@@ -34,16 +34,13 @@ namespace ToDoListProject.Pages
             {
                 _toDoLists[index] = updatedList;
             }
+
+            await Task.CompletedTask;
         }
 
         public ToDoListModel GetList(string listId)
         {
             return _toDoLists.FirstOrDefault(l => l.Id == listId);
-        }
-
-        private void EditListName()
-        {
-            _isEditing = true;
         }
     }
 }
