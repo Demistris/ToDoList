@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web;
 using System.Collections.Generic;
 using ToDoListProject.Models;
 
@@ -16,6 +17,8 @@ namespace ToDoListProject.Pages
         private List<ToDoItem> _uncompletedToDoItems = [];
         private List<ToDoItem> _completedToDoItems = [];
         private ToDoItem _newToDoItem = new() { Description = "", Completed = false };
+        private bool _isEditing;
+        private string _editListName;
 
         protected override void OnParametersSet()
         {
@@ -30,6 +33,8 @@ namespace ToDoListProject.Pages
                 }
             }
         }
+
+#region ToDosManagment
 
         private void AddNewItem()
         {
@@ -88,6 +93,28 @@ namespace ToDoListProject.Pages
             StateHasChanged();
         }
 
+        private void HandleDeleteItem(ToDoItem toDoItem)
+        {
+            if (toDoItem == null || ToDoListModel == null)
+            {
+                return;
+            }
+
+            if (toDoItem.Completed)
+            {
+                _completedToDoItems.Remove(toDoItem);
+            }
+            else
+            {
+                _uncompletedToDoItems.Remove(toDoItem);
+            }
+
+            ToDoListModel.Items.Remove(toDoItem);
+
+            OnListUpdate.InvokeAsync(ToDoListModel);
+            StateHasChanged();
+        }
+
         public void ReorderToDos(int oldIndex, int newIndex)
         {
             var toDos = _uncompletedToDoItems;
@@ -113,27 +140,46 @@ namespace ToDoListProject.Pages
             ReorderToDos(oldIndex, newIndex);
         }
 
-        private void HandleDeleteItem(ToDoItem toDoItem)
+        #endregion
+        #region ListManagment
+
+        public event EventHandler ListNameChanged;
+
+        protected virtual void OnListNameChanged(EventArgs e, string s)
         {
-            if (toDoItem == null || ToDoListModel == null)
+            ListNameChanged?.Invoke(s, e);
+        }
+
+        private void EditListName()
+        {
+            _isEditing = true;
+            _editListName = ToDoListModel.ListName;
+        }
+
+        private void HandleKeyDownToSaveEdit(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter")
             {
-                return;
+                SaveEdit();
+            }
+            else if (e.Key == "Escape")
+            {
+                _isEditing = false;
+            }
+        }
+
+        private async void SaveEdit()
+        {
+            if (!string.IsNullOrWhiteSpace(_editListName))
+            {
+                ToDoListModel.ListName = _editListName;
+                OnListNameChanged(EventArgs.Empty, _editListName);
             }
 
-            if (toDoItem.Completed)
-            {
-                _completedToDoItems.Remove(toDoItem);
-            }
-            else
-            {
-                _uncompletedToDoItems.Remove(toDoItem);
-            }
-
-            ToDoListModel.Items.Remove(toDoItem);
-
-            OnListUpdate.InvokeAsync(ToDoListModel);
+            _isEditing = false;
             StateHasChanged();
         }
 
+#endregion
     }
 }

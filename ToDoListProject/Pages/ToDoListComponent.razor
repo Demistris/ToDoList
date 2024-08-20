@@ -10,8 +10,15 @@
     }
     else
     {
-        <div class="alert alert-light" role="alert">
-            <h3 class="text-center">@ToDoListModel.ListName</h3>
+        <div class="alert alert-light text-center" role="alert">
+            @if (_isEditing)
+            {
+                <input class="form-control d-inline w-auto text-center" @bind="_editListName" @onblur="SaveEdit" @onkeydown="HandleKeyDownToSaveEdit" />
+            }
+            else
+            {
+                <h3 @onclick="EditListName">@ToDoListModel.ListName</h3>
+            }
         </div>
 
         <div class="container-fluid">
@@ -29,7 +36,6 @@
 
         <br />
 
-        //In here also itmes from list with the same ID as ListId
         <ul class="list-group">
             <SortableList Items="_uncompletedToDoItems" OnReorder="HandleReorder">
                 <ItemTemplate Context="toDo">

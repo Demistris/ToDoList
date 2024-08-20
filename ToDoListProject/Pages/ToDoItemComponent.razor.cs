@@ -14,6 +14,7 @@ namespace ToDoListProject.Pages
         public EventCallback<ToDoItem> OnDelete { get; set; }
 
         private bool _isEditing;
+        private string _editDescription;
 
         private async Task HandleCheckboxChange(ChangeEventArgs e)
         {
@@ -33,7 +34,7 @@ namespace ToDoListProject.Pages
         private void EditDescription()
         {
             _isEditing = true;
-            //editDescription = Item.Description;
+            _editDescription = Item.Description;
         }
 
         private void HandleKeyDownToSaveEdit(KeyboardEventArgs e)
@@ -50,13 +51,14 @@ namespace ToDoListProject.Pages
 
         private void SaveEdit()
         {
-            //if (!string.IsNullOrWhiteSpace(editDescription))
-            //{
-            //    Item.Description = editDescription;
-            //    OnUpdate.InvokeAsync(Item);
-            //}
+            if (!string.IsNullOrWhiteSpace(_editDescription))
+            {
+                Item.Description = _editDescription;
+                OnUpdate.InvokeAsync(Item);
+            }
 
             _isEditing = false;
+            StateHasChanged();
         }
 
         private async Task DeleteItem()

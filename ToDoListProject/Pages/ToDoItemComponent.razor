@@ -10,7 +10,7 @@
 
     @if(_isEditing)
     {
-        <input class="form-control d-inline w-auto" @bind="Item.Description" @onblur="SaveEdit" @onkeydown="HandleKeyDownToSaveEdit" />
+        <input class="form-control d-inline w-auto" @bind="_editDescription" @onblur="SaveEdit" @onkeydown="HandleKeyDownToSaveEdit" />
         <button class="btn btn-danger ms-2" @onclick="DeleteItem">X</button>
     }
     else

@@ -2,6 +2,7 @@
 @using ToDoListProject.Pages
 @inject ToDoService ToDoService
 @inject ToDoListManager ToDoListManager
+@inject ToDoListComponent ToDoListComponent
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
 
@@ -39,18 +40,20 @@
                                @bind:event="oninput"
                                @onkeydown="@(e => HandleKeyDown(e, list))"
                                @onfocusout="@(() => FinishEditing(list))"
-                               style="width: 120px;" />
+                               style="width: 100%; height: 100%;" />
                     }
                     else
                     {
-                        <span>@list.ListName</span>
+                        @* <span>@list.ListName</span> *@
+                        @* <span>@(list.Id == _editingListId ? _editingListName : _selectedListName)</span> *@
+                        <span>@(list.Id == _editingListId ? _editingListName : list.ListName)</span>
                     }
                 </NavLink>
             </div>
         }
 
-        <div class="nav-item px-3">
-            <button class="btn btn-primary" @onclick="AddNewList">Add List</button>
+        <div class="nav-item px-3 mt-auto">
+            <button class="btn btn-primary w-100" @onclick="AddNewList">Add List</button>
         </div>
     </nav>
 </div>
@@ -61,6 +64,25 @@
 
     private string _editingListId;
     private string _editingListName;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
+    }
+
+    private void MyObject_ListNameChanged(object sender, EventArgs e)
+    {
+        var list = ToDoService.GetAllLists().FirstOrDefault(l => l.Id.ToString() == sender.ToString());
+        
+        if (list != null)
+        {
+            list.ListName = sender.ToString();
+            StateHasChanged();
+        }
+
+        StateHasChanged();
+    }
 
     private void ToggleNavMenu()
     {
