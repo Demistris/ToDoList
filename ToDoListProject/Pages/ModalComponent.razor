@@ -1,0 +1,15 @@
+﻿@if (Show)
+{
+    <div class="my-modal">
+        <div class="my-modal-content">
+            <span @onclick="OnCancel" class="close">&times;</span>
+            <h3 class="my-modal__heading">@Title</h3>
+            <p class="my-modal__body">@Content</p>
+
+            <div class="my-modal__btns">
+                <button @onclick="OnCancel" type="button" class="my-modal__cancel">Cancel</button>
+                <button @onclick="OnAccept" type="button" class="my-modal__accept">Yes</button>
+            </div>
+        </div>
+    </div>
+}

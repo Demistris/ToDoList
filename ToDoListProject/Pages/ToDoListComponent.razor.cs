@@ -19,6 +19,7 @@ namespace ToDoListProject.Pages
         private ToDoItem _newToDoItem = new() { Description = "", Completed = false };
         private bool _isEditing;
         private string _editListName;
+        private bool _showDeleteConfirmation = false;
 
         protected override void OnParametersSet()
         {
@@ -180,6 +181,28 @@ namespace ToDoListProject.Pages
             StateHasChanged();
         }
 
-#endregion
+        private void DeleteList()
+        {
+            //await OnDelete.InvokeAsync();
+            //StateHasChanged();
+        }
+
+        private void ShowDeleteConfirmation()
+        {
+            _showDeleteConfirmation = true;
+        }
+
+        private void AcceptDeleteConfirmation(MouseEventArgs e)
+        {
+            _showDeleteConfirmation = false;
+            DeleteList();
+        }
+
+        private void HideDeleteConfirmation(MouseEventArgs e)
+        {
+            _showDeleteConfirmation = false;
+        }
+
+        #endregion
     }
 }
