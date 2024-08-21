@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
 using ToDoListProject.Models;
+using ToDoListProject.Services;
 
 namespace ToDoListProject.Pages
 {
@@ -11,8 +13,7 @@ namespace ToDoListProject.Pages
         public string ListId { get; set; }
         [Parameter] 
         public ToDoListModel ToDoListModel { get; set; }
-        [Parameter] 
-        public EventCallback<ToDoListModel> OnListUpdate { get; set; }
+        public event EventHandler ListNameChanged;
 
         private List<ToDoItem> _uncompletedToDoItems = [];
         private List<ToDoItem> _completedToDoItems = [];
@@ -55,8 +56,7 @@ namespace ToDoListProject.Pages
                 ToDoListModel.Items.Add(newItem);
                 _uncompletedToDoItems.Add(newItem);
                 _newToDoItem.Description = string.Empty;
-                OnListUpdate.InvokeAsync(ToDoListModel);
-                StateHasChanged();
+                _ = OnUpdateListAsync();
             }
         }
 
@@ -90,8 +90,7 @@ namespace ToDoListProject.Pages
                 }
             }
 
-            OnListUpdate.InvokeAsync(ToDoListModel);
-            StateHasChanged();
+            _ = OnUpdateListAsync();
         }
 
         private void HandleDeleteItem(ToDoItem toDoItem)
@@ -112,8 +111,13 @@ namespace ToDoListProject.Pages
 
             ToDoListModel.Items.Remove(toDoItem);
 
-            OnListUpdate.InvokeAsync(ToDoListModel);
-            StateHasChanged();
+            _ = OnUpdateListAsync();
+        }
+
+        private void HandleReorder((int OldIndex, int NewIndex) reorderInfo)
+        {
+            var (oldIndex, newIndex) = reorderInfo;
+            ReorderToDos(oldIndex, newIndex);
         }
 
         public void ReorderToDos(int oldIndex, int newIndex)
@@ -131,24 +135,21 @@ namespace ToDoListProject.Pages
                 toDos.Add(itemToMove);
             }
 
-            OnListUpdate.InvokeAsync(ToDoListModel);
-            StateHasChanged();
-        }
-
-        private void HandleReorder((int OldIndex, int NewIndex) reorderInfo)
-        {
-            var (oldIndex, newIndex) = reorderInfo;
-            ReorderToDos(oldIndex, newIndex);
+            _ = OnUpdateListAsync();
         }
 
         #endregion
         #region ListManagment
 
-        public event EventHandler ListNameChanged;
-
         protected virtual void OnListNameChanged(EventArgs e, string s)
         {
             ListNameChanged?.Invoke(s, e);
+        }
+
+        private async Task OnUpdateListAsync()
+        {
+            await ToDoService.UpdateList(ToDoListModel);
+            StateHasChanged();
         }
 
         private void EditListName()
@@ -169,22 +170,22 @@ namespace ToDoListProject.Pages
             }
         }
 
-        private async void SaveEdit()
+        private void SaveEdit()
         {
             if (!string.IsNullOrWhiteSpace(_editListName))
             {
                 ToDoListModel.ListName = _editListName;
                 OnListNameChanged(EventArgs.Empty, _editListName);
+                _ = OnUpdateListAsync();
             }
 
             _isEditing = false;
-            StateHasChanged();
         }
 
         private void DeleteList()
         {
-            //await OnDelete.InvokeAsync();
-            //StateHasChanged();
+            ToDoService.DeleteList(ListId);
+            StateHasChanged();
         }
 
         private void ShowDeleteConfirmation()

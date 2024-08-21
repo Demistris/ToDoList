@@ -8,6 +8,5 @@ namespace ToDoListProject.Models
         public string Id { get; set; } = Guid.NewGuid().ToString();
         public string ListName { get; set; } = string.Empty;
         public List<ToDoItem> Items { get; set; } = new List<ToDoItem>();
-        //public bool IsEditing = false;
     }
 }

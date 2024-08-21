@@ -1,9 +1,9 @@
 ﻿@using ToDoListProject.Models
 @using ToDoListProject.Pages
+@using ToDoListProject.Services
 @inject ToDoService ToDoService
-@inject ToDoListManager ToDoListManager
+@inject NavigationService NavigationService
 @inject ToDoListComponent ToDoListComponent
-@inject NavigationManager NavigationManager
 @inject IJSRuntime JS
 
 <div class="top-row ps-3 navbar navbar-dark">
@@ -23,11 +23,6 @@
             </NavLink>
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="lists">
-                <span class="oi oi-list" aria-hidden="true"></span> Manage Lists
-            </NavLink>
-        </div>
         @foreach (var list in ToDoService.GetAllLists())
         {
             <div class="nav-item px-3" data-list-id="@list.Id">
@@ -67,24 +62,48 @@
     {
         base.OnInitialized();
         ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
+        ToDoService.ListDeleted += MyObject_ListDeleted;
     }
 
     private void MyObject_ListNameChanged(object sender, EventArgs e)
     {
         var list = ToDoService.GetAllLists().FirstOrDefault(l => l.Id.ToString() == sender.ToString());
-        
+
         if (list != null)
         {
             list.ListName = sender.ToString();
             StateHasChanged();
         }
+    }
 
-        StateHasChanged();
+    private void MyObject_ListDeleted(object sender, EventArgs e)
+    {
+        Console.WriteLine($"MyObject_ListDeleted is raised");
+        //Update foreach
     }
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task AddNewList()
+    {
+        var newList = await ToDoService.AddList();
+
+        if (newList != null)
+        {
+            _editingListId = newList.Id;
+            _editingListName = "";
+            StateHasChanged();
+            await Task.Delay(50);
+            await FocusNewInput(newList.Id);
+        }
+    }
+
+    private async Task FocusNewInput(string listId)
+    {
+        await JS.InvokeAsync<object>("focusNewInput", listId);
     }
 
     private async Task HandleKeyDown(KeyboardEventArgs e, ToDoListModel list)
@@ -105,7 +124,7 @@
         list.ListName = _editingListName;
         _editingListId = null;
         await ToDoService.UpdateList(list);
-        NavigationManager.NavigateTo($"/list/{list.Id}");
+        NavigationService.NavigateToList($"{list.Id}");
         StateHasChanged();
     }
 
@@ -120,24 +139,5 @@
             counter++;
         } while (ToDoService.GetAllLists().Any(l => l.ListName == newName));
         return newName;
-    }
-
-    private async Task AddNewList()
-    {
-        var newList = await ToDoListManager.AddList();
-
-        if (newList != null)
-        {
-            _editingListId = newList.Id;
-            _editingListName = "";
-            StateHasChanged();
-            await Task.Delay(50);
-            await FocusNewInput(newList.Id);
-        }
-    }
-
-    private async Task FocusNewInput(string listId)
-    {
-        await JS.InvokeAsync<object>("focusNewInput", listId);
     }
 }

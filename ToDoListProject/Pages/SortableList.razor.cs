@@ -32,10 +32,5 @@ namespace ToDoListProject.Pages
         {
             await OnReorder.InvokeAsync((oldIndex, newIndex));
         }
-
-        public void Dispose()
-        {
-            _selfReference?.Dispose();
-        }
     }
 }

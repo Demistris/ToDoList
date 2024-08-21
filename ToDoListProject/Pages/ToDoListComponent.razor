@@ -1,7 +1,8 @@
 ﻿@page "/list/{ListId}"
+@using ToDoListProject.Models
+@using ToDoListProject.Services
 @inject ToDoService ToDoService
 @inject NavigationManager NavigationManager
-@using ToDoListProject.Models
 
 <div>
     @if (ToDoListModel == null)
