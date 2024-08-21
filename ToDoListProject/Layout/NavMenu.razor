@@ -23,7 +23,7 @@
             </NavLink>
         </div>
 
-        @foreach (var list in ToDoService.GetAllLists())
+        @foreach (var list in _lists)
         {
             <div class="nav-item px-3" data-list-id="@list.Id">
                 <NavLink href="@($"/list/{list.Id}")" class="nav-link">
@@ -55,12 +55,14 @@
     private bool collapseNavMenu = true;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
+    private List<ToDoListModel> _lists;
     private string _editingListId;
     private string _editingListName;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
+        _lists = ToDoService.GetAllLists();
         ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
         ToDoService.ListDeleted += MyObject_ListDeleted;
     }
@@ -78,8 +80,8 @@
 
     private void MyObject_ListDeleted(object sender, EventArgs e)
     {
-        Console.WriteLine($"MyObject_ListDeleted is raised");
-        //Update foreach
+        _lists = ToDoService.GetAllLists();
+        StateHasChanged();
     }
 
     private void ToggleNavMenu()
