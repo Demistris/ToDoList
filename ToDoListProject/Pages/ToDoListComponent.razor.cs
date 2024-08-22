@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
@@ -21,6 +22,14 @@ namespace ToDoListProject.Pages
         private bool _isEditing;
         private string _editListName;
         private bool _showDeleteConfirmation = false;
+        private int _maxListNameLength = 100;
+        private int _maxToDoDescriptionLength = 200;
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+            Console.WriteLine("OnInitialized ToDoListComponent");
+        }
 
         protected override void OnParametersSet()
         {
@@ -36,6 +45,14 @@ namespace ToDoListProject.Pages
             }
         }
 
+        private void TrimString(string stringToTrim, int maxLength)
+        {
+            if (stringToTrim.Length > maxLength)
+            {
+                stringToTrim = stringToTrim.Length <= maxLength ? stringToTrim : stringToTrim[..maxLength];
+            }
+        }
+
 #region ToDosManagment
 
         private void AddNewItem()
@@ -44,6 +61,8 @@ namespace ToDoListProject.Pages
             {
                 return;
             }
+
+            TrimString(_newToDoItem.Description, _maxToDoDescriptionLength);
 
             var newItem = new ToDoItem
             {
@@ -174,6 +193,8 @@ namespace ToDoListProject.Pages
         {
             if (!string.IsNullOrWhiteSpace(_editListName))
             {
+                TrimString(_editListName, _maxListNameLength);
+
                 ToDoListModel.ListName = _editListName;
                 OnListNameChanged(EventArgs.Empty, _editListName);
                 _ = OnUpdateListAsync();

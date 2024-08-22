@@ -15,6 +15,7 @@ namespace ToDoListProject.Pages
 
         private bool _isEditing;
         private string _editDescription;
+        private int _maxToDoDescriptionLength = 200;
 
         private async Task HandleCheckboxChange(ChangeEventArgs e)
         {
@@ -53,6 +54,11 @@ namespace ToDoListProject.Pages
         {
             if (!string.IsNullOrWhiteSpace(_editDescription))
             {
+                if (_editDescription.Length > _maxToDoDescriptionLength)
+                {
+                    _editDescription = _editDescription.Length <= _maxToDoDescriptionLength ? _editDescription : _editDescription[.._maxToDoDescriptionLength];
+                }
+
                 Item.Description = _editDescription;
                 OnUpdate.InvokeAsync(Item);
             }

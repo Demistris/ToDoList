@@ -123,6 +123,11 @@
             _editingListName = GenerateUntitledName();
         }
 
+        if (_editingListName.Length > 100)
+        {
+            _editingListName = _editingListName.Length <= 100 ? _editingListName : _editingListName[..100];
+        }
+
         list.ListName = _editingListName;
         _editingListId = null;
         await ToDoService.UpdateList(list);
