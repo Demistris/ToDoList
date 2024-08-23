@@ -25,12 +25,6 @@ namespace ToDoListProject.Pages
         private int _maxListNameLength = 100;
         private int _maxToDoDescriptionLength = 200;
 
-        protected override void OnInitialized()
-        {
-            base.OnInitialized();
-            Console.WriteLine("OnInitialized ToDoListComponent");
-        }
-
         protected override void OnParametersSet()
         {
             if (!string.IsNullOrEmpty(ListId))
@@ -53,7 +47,17 @@ namespace ToDoListProject.Pages
             }
         }
 
-#region ToDosManagment
+        #region ToDosManagment
+
+        private async Task HandleEnterKeyDown(KeyboardEventArgs e)
+        {
+            if (e.Key == "Enter" && !e.ShiftKey)
+            {
+                await Task.Delay(1);
+                _newToDoItem.Description = _newToDoItem.Description.TrimEnd('\n', '\r');
+                AddNewItem();
+            }
+        }
 
         private void AddNewItem()
         {
@@ -64,18 +68,26 @@ namespace ToDoListProject.Pages
 
             TrimString(_newToDoItem.Description, _maxToDoDescriptionLength);
 
-            var newItem = new ToDoItem
-            {
-                Description = _newToDoItem.Description,
-                Completed = false
-            };
+            List<string> multilineText = _newToDoItem.Description.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+                .Select(toDo => toDo.Trim())
+                .Where(toDo => !string.IsNullOrWhiteSpace(toDo))
+                .ToList();
 
-            if (ToDoListModel != null)
+            foreach (var toDo in multilineText)
             {
-                ToDoListModel.Items.Add(newItem);
-                _uncompletedToDoItems.Add(newItem);
-                _newToDoItem.Description = string.Empty;
-                _ = OnUpdateListAsync();
+                var newItem = new ToDoItem
+                {
+                    Description = toDo,
+                    Completed = false
+                };
+
+                if (ToDoListModel != null)
+                {
+                    ToDoListModel.Items.Add(newItem);
+                    _uncompletedToDoItems.Add(newItem);
+                    _newToDoItem.Description = string.Empty;
+                    _ = OnUpdateListAsync();
+                }
             }
         }
 

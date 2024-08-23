@@ -33,12 +33,15 @@
 
         <div class="container-fluid">
             <div class="row">
-                <form @onsubmit="AddNewItem" class="input-group">
+                <form @onsubmit="AddNewItem" @onsubmit:preventDefault class="input-group">
                     <div class="col-md-auto p-1">
                         <button type="submit" class="btn btn-secondary w-100">Add</button>
                     </div>
                     <div class="col p-1">
-                        <input type="text" class="form-control" placeholder="New item..." @bind="_newToDoItem.Description" />
+                        <textarea type="text" class="form-control" rows="1" placeholder="New item..."
+                                  @bind="_newToDoItem.Description"
+                                  @bind:event="oninput"
+                                  @onkeydown="HandleEnterKeyDown" />
                     </div>
                 </form>
             </div>
