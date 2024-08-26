@@ -14,7 +14,7 @@ namespace ToDoListProject.Pages
         public string ListId { get; set; }
         [Parameter] 
         public ToDoListModel ToDoListModel { get; set; }
-        public event EventHandler ListNameChanged;
+        public event EventHandler<(string listId, string newName)> ListNameChanged;
 
         private List<ToDoItem> _uncompletedToDoItems = [];
         private List<ToDoItem> _completedToDoItems = [];
@@ -24,6 +24,7 @@ namespace ToDoListProject.Pages
         private bool _showDeleteConfirmation = false;
         private int _maxListNameLength = 100;
         private int _maxToDoDescriptionLength = 200;
+        private ElementReference _editInputElement;
 
         protected override void OnParametersSet()
         {
@@ -172,9 +173,9 @@ namespace ToDoListProject.Pages
         #endregion
         #region ListManagment
 
-        protected virtual void OnListNameChanged(EventArgs e, string s)
+        protected virtual void OnListNameChanged(EventArgs e)
         {
-            ListNameChanged?.Invoke(s, e);
+            ListNameChanged?.Invoke(this, (ListId, _editListName));
         }
 
         private async Task OnUpdateListAsync()
@@ -182,11 +183,16 @@ namespace ToDoListProject.Pages
             await ToDoService.UpdateList(ToDoListModel);
             StateHasChanged();
         }
-
+        
         private void EditListName()
         {
             _isEditing = true;
             _editListName = ToDoListModel.ListName;
+
+            StateHasChanged();
+
+            // Set focus after rendering the input
+            _ = Task.Delay(1).ContinueWith(_ => _editInputElement.FocusAsync());
         }
 
         private void HandleKeyDownToSaveEdit(KeyboardEventArgs e)
@@ -208,7 +214,7 @@ namespace ToDoListProject.Pages
                 TrimString(_editListName, _maxListNameLength);
 
                 ToDoListModel.ListName = _editListName;
-                OnListNameChanged(EventArgs.Empty, _editListName);
+                OnListNameChanged(EventArgs.Empty);
                 _ = OnUpdateListAsync();
             }
 

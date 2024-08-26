@@ -14,7 +14,7 @@
             <div>
                 @if (_isEditing)
                 {
-                    <input class="form-control d-inline w-auto" @bind="_editListName" @onblur="SaveEdit" @onkeydown="HandleKeyDownToSaveEdit" />
+                    <input class="form-control d-inline w-auto" @ref="_editInputElement" @bind="_editListName" @onblur="SaveEdit" @onkeydown="HandleKeyDownToSaveEdit" />
                 }
                 else
                 {
