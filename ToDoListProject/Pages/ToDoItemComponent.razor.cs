@@ -16,6 +16,7 @@ namespace ToDoListProject.Pages
         private bool _isEditing;
         private string _editDescription;
         private int _maxToDoDescriptionLength = 200;
+        private ElementReference _editInputElement;
 
         private async Task HandleCheckboxChange(ChangeEventArgs e)
         {
@@ -36,6 +37,11 @@ namespace ToDoListProject.Pages
         {
             _isEditing = true;
             _editDescription = Item.Description;
+
+            StateHasChanged();
+
+            // Set focus after rendering the input
+            _ = Task.Delay(1).ContinueWith(_ => _editInputElement.FocusAsync());
         }
 
         private void HandleKeyDownToSaveEdit(KeyboardEventArgs e)
