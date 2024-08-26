@@ -26,21 +26,23 @@
         @foreach (var list in _lists)
         {
             <div class="nav-item px-3" data-list-id="@list.Id">
-                <NavLink href="@($"/list/{list.Id}")" class="nav-link">
-                    <span class="oi oi-list-rich" aria-hidden="true"></span>
-
-                    @if (_editingListId == list.Id)
-                    {
-                        <input @bind="_editingListName"
-                               @bind:event="oninput"
-                               @onkeydown="@(e => HandleKeyDown(e, list))"
-                               @onfocusout="@(() => FinishEditing(list))"
-                               style="width: 100%; height: 100%;" />
-                    }
-                    else
-                    {
-                        <span>@(list.Id == _editingListId ? _editingListName : list.ListName)</span>
-                    }
+                <NavLink href="@($"/list/{list.Id}")" class="nav-link d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span>
+                        @if (_editingListId == list.Id)
+                        {
+                            <input @bind="_editingListName"
+                                   @bind:event="oninput"
+                                   @onkeydown="@(e => HandleKeyDown(e, list))"
+                                   @onfocusout="@(() => FinishEditing(list))"
+                                   style="width: 100%; height: 100%;" />
+                        }
+                        else
+                        {
+                            <span>@(list.Id == _editingListId ? _editingListName : list.ListName)</span>
+                        }
+                    </div>
+                    <span class="badge bg-secondary">if count > 0 then this 7</span>
                 </NavLink>
             </div>
         }
