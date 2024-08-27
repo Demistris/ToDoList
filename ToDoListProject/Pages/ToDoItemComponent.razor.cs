@@ -17,6 +17,7 @@ namespace ToDoListProject.Pages
         private string _editDescription;
         private int _maxToDoDescriptionLength = 200;
         private ElementReference _editInputElement;
+        private bool _isDeleting;
 
         private async Task HandleCheckboxChange(ChangeEventArgs e)
         {
@@ -73,8 +74,20 @@ namespace ToDoListProject.Pages
             StateHasChanged();
         }
 
+        private void HandleBlur()
+        {
+            Task.Delay(150).ContinueWith(_ =>
+            {
+                if(!_isDeleting)
+                {
+                    SaveEdit();
+                }
+            });
+        }
+
         private async Task DeleteItem()
         {
+            _isDeleting = true;
             await OnDelete.InvokeAsync(Item);
             StateHasChanged();
         }
