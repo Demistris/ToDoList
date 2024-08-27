@@ -74,30 +74,22 @@
         _lists = ToDoService.GetAllLists();
         ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
         ToDoService.ListDeleted += MyObject_ListDeleted;
-        // Count changed:
-        // ToDoService. += ToDoService_ListToDoCountChanged;
+        ToDoService.ListToDoCountChanged += ToDoService_ListToDoCountChanged;
     }
 
-    private void MyObject_ListNameChanged(object sender, (string listId, string newName) e)
+    private void MyObject_ListNameChanged(object sender, EventArgs e)
     {
-        var list = _lists.FirstOrDefault(l => l.Id == e.listId);
-
-        if (list != null)
-        {
-            list.ListName = e.newName;
-            StateHasChanged();
-        }
+        InvokeAsync(StateHasChanged);
     }
 
     private void MyObject_ListDeleted(object sender, EventArgs e)
     {
-        _lists = ToDoService.GetAllLists();
-        StateHasChanged();
+        InvokeAsync(StateHasChanged);
     }
 
     private void ToDoService_ListToDoCountChanged(object sender, EventArgs e)
     {
-        // InvokeAsync(StateHasChanged);
+        InvokeAsync(StateHasChanged);
     }
 
     private void ToggleNavMenu()

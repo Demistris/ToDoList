@@ -14,7 +14,7 @@ namespace ToDoListProject.Pages
         public string ListId { get; set; }
         [Parameter] 
         public ToDoListModel ToDoListModel { get; set; }
-        public event EventHandler<(string listId, string newName)> ListNameChanged;
+        public event EventHandler ListNameChanged;
 
         private List<ToDoItem> _uncompletedToDoItems = [];
         private List<ToDoItem> _completedToDoItems = [];
@@ -180,7 +180,7 @@ namespace ToDoListProject.Pages
 
         protected virtual void OnListNameChanged(EventArgs e)
         {
-            ListNameChanged?.Invoke(this, (ListId, _editListName));
+            ListNameChanged?.Invoke(this, e);
         }
 
         private async Task OnUpdateListAsync()

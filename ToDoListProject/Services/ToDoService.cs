@@ -9,6 +9,7 @@ namespace ToDoListProject.Services
     public class ToDoService
     {
         public List<ToDoListModel> GetAllLists() => _toDoLists;
+        public event EventHandler ListToDoCountChanged;
 
         private List<ToDoListModel> _toDoLists = new List<ToDoListModel>();
         private string _newListName = "Untitled";
@@ -78,11 +79,17 @@ namespace ToDoListProject.Services
         public void SetUncompletedCount(string listId, int count)
         {
             _uncompletedCounts[listId] = count;
+            OnListToDoCountChanged();
         }
 
         public int GetUncompletedCount(string listId)
         {
             return _uncompletedCounts.TryGetValue(listId, out int count) ? count : 0;
+        }
+
+        protected virtual void OnListToDoCountChanged()
+        {
+            ListToDoCountChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }
