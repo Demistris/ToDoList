@@ -23,7 +23,7 @@
             </NavLink>
         </div>
 
-        @foreach (var list in _lists)
+        @foreach (ToDoListModel list in _lists)
         {
             <div class="nav-item px-3" data-list-id="@list.Id">
                 <NavLink href="@($"/list/{list.Id}")" class="nav-link d-flex justify-content-between align-items-center">
@@ -42,7 +42,13 @@
                             <span>@(list.Id == _editingListId ? _editingListName : list.ListName)</span>
                         }
                     </div>
-                    <span class="badge bg-secondary">if count > 0 then this 7</span>
+                    @{
+                        int uncompletedCount = ToDoService.GetUncompletedCount(list.Id);
+                        if (uncompletedCount > 0)
+                        {
+                            <span class="badge bg-secondary">@uncompletedCount</span>
+                        }
+                    }
                 </NavLink>
             </div>
         }
@@ -60,6 +66,7 @@
     private List<ToDoListModel> _lists;
     private string _editingListId;
     private string _editingListName;
+    private int _uncompletedCount;
 
     protected override void OnInitialized()
     {
@@ -67,6 +74,8 @@
         _lists = ToDoService.GetAllLists();
         ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
         ToDoService.ListDeleted += MyObject_ListDeleted;
+        // Count changed:
+        // ToDoService. += ToDoService_ListToDoCountChanged;
     }
 
     private void MyObject_ListNameChanged(object sender, (string listId, string newName) e)
@@ -84,6 +93,11 @@
     {
         _lists = ToDoService.GetAllLists();
         StateHasChanged();
+    }
+
+    private void ToDoService_ListToDoCountChanged(object sender, EventArgs e)
+    {
+        // InvokeAsync(StateHasChanged);
     }
 
     private void ToggleNavMenu()

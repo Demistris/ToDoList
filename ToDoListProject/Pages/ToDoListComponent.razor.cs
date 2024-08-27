@@ -170,6 +170,11 @@ namespace ToDoListProject.Pages
             _ = OnUpdateListAsync();
         }
 
+        public int HowManyUncompletedToDos()
+        {
+            return _uncompletedToDoItems.Count;
+        }
+
         #endregion
         #region ListManagment
 
@@ -180,7 +185,9 @@ namespace ToDoListProject.Pages
 
         private async Task OnUpdateListAsync()
         {
+            ToDoService.SetUncompletedCount(ListId, HowManyUncompletedToDos());
             await ToDoService.UpdateList(ToDoListModel);
+
             StateHasChanged();
         }
         

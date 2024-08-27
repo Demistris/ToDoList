@@ -1,5 +1,6 @@
 ﻿using Blazorise;
 using Microsoft.AspNetCore.Components;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using ToDoListProject.Models;
 
@@ -12,6 +13,7 @@ namespace ToDoListProject.Services
         private List<ToDoListModel> _toDoLists = new List<ToDoListModel>();
         private string _newListName = "Untitled";
         private readonly NavigationService _navigationService;
+        private ConcurrentDictionary<string, int> _uncompletedCounts = new ConcurrentDictionary<string, int>();
 
         public ToDoService(NavigationService navigationService)
         {
@@ -72,5 +74,15 @@ namespace ToDoListProject.Services
         }
 
         public ToDoListModel GetList(string listId) => _toDoLists.FirstOrDefault(l => l.Id == listId);
+
+        public void SetUncompletedCount(string listId, int count)
+        {
+            _uncompletedCounts[listId] = count;
+        }
+
+        public int GetUncompletedCount(string listId)
+        {
+            return _uncompletedCounts.TryGetValue(listId, out int count) ? count : 0;
+        }
     }
 }
