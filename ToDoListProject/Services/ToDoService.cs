@@ -9,7 +9,7 @@ namespace ToDoListProject.Services
     public class ToDoService
     {
         public List<ToDoListModel> GetAllLists() => _toDoLists;
-        public event EventHandler ListToDoCountChanged;
+        public event EventHandler ListUpdated;
 
         private List<ToDoListModel> _toDoLists = new List<ToDoListModel>();
         private string _newListName = "Untitled";
@@ -35,11 +35,9 @@ namespace ToDoListProject.Services
             return newList;
         }
 
-        public event EventHandler ListDeleted;
-
-        protected virtual void OnListDeleted(EventArgs e)
+        protected virtual void OnListUpdated(EventArgs e)
         {
-            ListDeleted?.Invoke(this, e);
+            ListUpdated?.Invoke(this, e);
         }
 
         public void DeleteList(string listId)
@@ -49,7 +47,7 @@ namespace ToDoListProject.Services
             if (listToDelete != null)
             {
                 _toDoLists.Remove(listToDelete);
-                OnListDeleted(EventArgs.Empty);
+                OnListUpdated(EventArgs.Empty);
 
                 if (_toDoLists.Any())
                 {
@@ -79,17 +77,12 @@ namespace ToDoListProject.Services
         public void SetUncompletedCount(string listId, int count)
         {
             _uncompletedCounts[listId] = count;
-            OnListToDoCountChanged();
+            OnListUpdated(EventArgs.Empty);
         }
 
         public int GetUncompletedCount(string listId)
         {
             return _uncompletedCounts.TryGetValue(listId, out int count) ? count : 0;
-        }
-
-        protected virtual void OnListToDoCountChanged()
-        {
-            ListToDoCountChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

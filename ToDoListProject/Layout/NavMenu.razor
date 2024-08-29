@@ -23,7 +23,14 @@
             </NavLink>
         </div>
 
-        @foreach (ToDoListModel list in _lists)
+        <div class="nav-item px-3">
+            <div class="position-relative">
+                <input class="form-control pe-4" @bind-value="_searchTerm" @bind-value:event="oninput" placeholder="Search" />
+                <i class="fa-solid fa-magnifying-glass position-absolute top-50 end-0 translate-middle-y pe-2"></i>
+            </div>
+        </div>
+
+        @foreach (ToDoListModel list in _filteredLists)
         {
             <div class="nav-item px-3" data-list-id="@list.Id">
                 <NavLink href="@($"/list/{list.Id}")" class="nav-link d-flex justify-content-between align-items-center">
@@ -31,7 +38,8 @@
                         <span class="oi oi-list-rich" aria-hidden="true"></span>
                         @if (_editingListId == list.Id)
                         {
-                            <input @bind="_editingListName"
+                            <input class="form-control" 
+                                   @bind="_editingListName"
                                    @bind:event="oninput"
                                    @onkeydown="@(e => HandleKeyDown(e, list))"
                                    @onfocusout="@(() => FinishEditing(list))"
@@ -54,7 +62,7 @@
         }
 
         <div class="nav-item px-3 mt-auto">
-            <button class="btn btn-primary w-100" @onclick="AddNewList">Add List</button>
+            <button class="btn btn-primary w-100 text-md-start" @onclick="AddNewList"><i class="fa-solid fa-plus"></i> &nbsp; Add new list</button>
         </div>
     </nav>
 </div>
@@ -67,14 +75,16 @@
     private string _editingListId;
     private string _editingListName;
     private int _uncompletedCount;
+    private string _searchTerm = "";
+
+    private List<ToDoListModel> _filteredLists => _lists.Where(list => list.ListName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _lists = ToDoService.GetAllLists();
         ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
-        ToDoService.ListDeleted += MyObject_ListDeleted;
-        ToDoService.ListToDoCountChanged += ToDoService_ListToDoCountChanged;
+        ToDoService.ListUpdated += MyObject_ListUpdated;
     }
 
     private void MyObject_ListNameChanged(object sender, EventArgs e)
@@ -82,12 +92,7 @@
         InvokeAsync(StateHasChanged);
     }
 
-    private void MyObject_ListDeleted(object sender, EventArgs e)
-    {
-        InvokeAsync(StateHasChanged);
-    }
-
-    private void ToDoService_ListToDoCountChanged(object sender, EventArgs e)
+    private void MyObject_ListUpdated(object sender, EventArgs e)
     {
         InvokeAsync(StateHasChanged);
     }
