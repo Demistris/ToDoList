@@ -17,7 +17,16 @@ namespace ToDoListProject.Pages
         private string _editDescription;
         private int _maxToDoDescriptionLength = 200;
         private ElementReference _editInputElement;
-        private bool _isDeleting;
+        private bool _shouldFocusInput = false;
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (_shouldFocusInput)
+            {
+                _shouldFocusInput = false;
+                await _editInputElement.FocusAsync();
+            }
+        }
 
         private async Task HandleCheckboxChange(ChangeEventArgs e)
         {
@@ -39,22 +48,9 @@ namespace ToDoListProject.Pages
             _isEditing = true;
             _editDescription = Item.Description;
 
+            _shouldFocusInput = true;
+
             StateHasChanged();
-
-            // Set focus after rendering the input
-            _ = Task.Delay(1).ContinueWith(_ => _editInputElement.FocusAsync());
-        }
-
-        private void HandleKeyDownToSaveEdit(KeyboardEventArgs e)
-        {
-            if(e.Key == "Enter")
-            {
-                SaveEdit();
-            }
-            else if(e.Key == "Escape")
-            {
-                _isEditing = false;
-            }
         }
 
         private void SaveEdit()
@@ -74,20 +70,8 @@ namespace ToDoListProject.Pages
             StateHasChanged();
         }
 
-        private void HandleBlur()
-        {
-            Task.Delay(150).ContinueWith(_ =>
-            {
-                if(!_isDeleting)
-                {
-                    SaveEdit();
-                }
-            });
-        }
-
         private async Task DeleteItem()
         {
-            _isDeleting = true;
             await OnDelete.InvokeAsync(Item);
             StateHasChanged();
         }

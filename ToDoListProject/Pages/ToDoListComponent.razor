@@ -14,7 +14,9 @@
             <div>
                 @if (_isEditing)
                 {
-                    <input class="form-control d-inline w-auto" @ref="_editInputElement" @bind="_editListName" @onblur="SaveEdit" @onkeydown="HandleKeyDownToSaveEdit" />
+                    <form @onsubmit="SaveEdit">
+                        <input class="form-control d-inline w-auto" @ref="_editInputElement" @bind="_editListName" @onfocusout="SaveEdit" />
+                    </form>
                 }
                 else
                 {
@@ -33,11 +35,11 @@
 
         <div class="container-fluid">
             <div class="row">
-                <form @onsubmit="AddNewItem" @onsubmit:preventDefault class="input-group">
+                <form @onsubmit="AddNewItem" class="input-group">
                     <div class="col-md-auto p-1">
                         <button type="submit" class="btn btn-secondary w-100">Add</button>
                     </div>
-                    <div class="col p-1">
+                    <div @onkeydown:preventDefault="_preventDefault" class="col p-1">
                         <textarea type="text" class="form-control" rows="1" placeholder="New item..."
                                   @bind="_newToDoItem.Description"
                                   @bind:event="oninput"

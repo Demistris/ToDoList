@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
 using ToDoListProject.Models;
@@ -25,6 +26,8 @@ namespace ToDoListProject.Pages
         private int _maxListNameLength = 100;
         private int _maxToDoDescriptionLength = 200;
         private ElementReference _editInputElement;
+        private bool _shouldFocusInput = false;
+        private bool _preventDefault;
 
         protected override void OnParametersSet()
         {
@@ -49,13 +52,13 @@ namespace ToDoListProject.Pages
         }
 
         #region ToDosManagment
-
-        private async Task HandleEnterKeyDown(KeyboardEventArgs e)
+        
+        private void HandleEnterKeyDown(KeyboardEventArgs e)
         {
+            _preventDefault = e.Key == "Enter" && !e.ShiftKey;
+
             if (e.Key == "Enter" && !e.ShiftKey)
             {
-                await Task.Delay(1);
-                _newToDoItem.Description = _newToDoItem.Description.TrimEnd('\n', '\r');
                 AddNewItem();
             }
         }
@@ -178,6 +181,15 @@ namespace ToDoListProject.Pages
         #endregion
         #region ListManagment
 
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+            if (_shouldFocusInput)
+            {
+                _shouldFocusInput = false;
+                await _editInputElement.FocusAsync();
+            }
+        }
+
         protected virtual void OnListNameChanged(EventArgs e)
         {
             ListNameChanged?.Invoke(this, e);
@@ -190,28 +202,15 @@ namespace ToDoListProject.Pages
 
             StateHasChanged();
         }
-        
+
         private void EditListName()
         {
             _isEditing = true;
             _editListName = ToDoListModel.ListName;
 
+            _shouldFocusInput = true;
+
             StateHasChanged();
-
-            // Set focus after rendering the input
-            _ = Task.Delay(1).ContinueWith(_ => _editInputElement.FocusAsync());
-        }
-
-        private void HandleKeyDownToSaveEdit(KeyboardEventArgs e)
-        {
-            if (e.Key == "Enter")
-            {
-                SaveEdit();
-            }
-            else if (e.Key == "Escape")
-            {
-                _isEditing = false;
-            }
         }
 
         private void SaveEdit()

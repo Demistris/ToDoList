@@ -10,7 +10,9 @@
 
     @if(_isEditing)
     {
-        <input class="form-control d-inline w-auto" @ref="_editInputElement" @bind="_editDescription" @onblur="HandleBlur" @onkeydown="HandleKeyDownToSaveEdit" />
+        <form @onsubmit="SaveEdit">
+            <input class="form-control d-inline w-auto" @ref="_editInputElement" @bind="_editDescription" @onfocusout="SaveEdit" />
+        </form>
         <button class="btn btn-danger ms-2" @onclick="DeleteItem">X</button>
     }
     else
