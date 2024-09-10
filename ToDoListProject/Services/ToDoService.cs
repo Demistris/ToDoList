@@ -55,7 +55,7 @@ namespace ToDoListProject.Services
                 }
                 else
                 {
-                    _navigationService.NavigateToHomePage();
+                    _navigationService.NavigateTo("/");
                 }
             }
         }

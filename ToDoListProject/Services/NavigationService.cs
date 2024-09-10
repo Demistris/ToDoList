@@ -16,9 +16,9 @@ namespace ToDoListProject.Services
             _navigationManager.NavigateTo($"/list/{listId}");
         }
 
-        public void NavigateToHomePage()
+        public void NavigateTo(string navigationTarget)
         {
-            _navigationManager.NavigateTo("/");
+            _navigationManager.NavigateTo($"{navigationTarget}");
         }
     }
 }
