@@ -5,8 +5,6 @@ using ToDoListProject;
 using ToDoListProject.Pages;
 using Blazorise.Bootstrap;
 using Blazorise.Icons.FontAwesome;
-using Microsoft.AspNetCore.Components;
-using ToDoListProject.Layout;
 using ToDoListProject.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -25,5 +23,6 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<ToDoListComponent>();
 builder.Services.AddScoped<NavigationService>();
 builder.Services.AddScoped<ToDoService>();
+builder.Services.AddScoped<ApiService>();
 
 await builder.Build().RunAsync();

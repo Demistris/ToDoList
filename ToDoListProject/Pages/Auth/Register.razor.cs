@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Pages.Auth
 {
@@ -8,22 +8,15 @@ namespace ToDoListProject.Pages.Auth
 
         private async Task HandleRegistration()
         {
-            // TODO: Implement registration logic
-            Navigation.NavigateTo("/login");
+            try
+            {
+                var user = await ApiService.RegisterUser(_registerModel);
+                Navigation.NavigateTo("/login");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Registration failed: {ex.Message}");
+            }
         }
-    }
-
-    public class RegisterModel
-    {
-        [Required]
-        public string Username { get; set; }
-
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; }
-
-        [Required]
-        [MinLength(6)]
-        public string Password { get; set; }
     }
 }

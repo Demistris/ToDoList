@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Pages.Auth
 {
@@ -8,17 +8,16 @@ namespace ToDoListProject.Pages.Auth
 
         private async Task HandleLogin()
         {
-            // TODO: Implement login logic
-            Navigation.NavigateTo("/");
+            var user = await ApiService.LoginUser(_loginModel);
+
+            if(user != null)
+            {
+                Navigation.NavigateTo("/");
+            }
+            else
+            {
+                // TODO: Handle login failure (e.g., display error message)
+            }
         }
-    }
-
-    public class LoginModel
-    {
-        [Required]
-        public string Username { get; set; }
-
-        [Required]
-        public string Password { get; set; }
     }
 }

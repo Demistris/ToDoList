@@ -1,4 +1,4 @@
-﻿namespace ToDoListProject.Models
+﻿namespace ToDoList.Shared.Models
 {
     public class User
     {
