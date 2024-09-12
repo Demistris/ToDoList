@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Net.NetworkInformation;
-using ToDoListProject.Models;
+using ToDoList.Shared.Models;
 using ToDoListProject.Services;
 
 namespace ToDoListProject.Pages

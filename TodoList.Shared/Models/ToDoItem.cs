@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ToDoListProject.Models
+namespace ToDoList.Shared.Models
 {
     public class ToDoItem
     {
@@ -9,5 +9,7 @@ namespace ToDoListProject.Models
         [Required(ErrorMessage = "Description is required")]
         public required string Description { get; set; }
         public bool Completed { get; set; }
+        public string ToDoListModelId { get; set; }
+        public ToDoListModel ToDoListModel { get; set; }
     }
 }

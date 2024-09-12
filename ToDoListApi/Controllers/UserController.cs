@@ -36,7 +36,7 @@ namespace ToDoListApi.Controllers
 
             if(user == null)
             {
-                return Unauthorized();
+                return Unauthorized("Invalid username or password");
             }
 
             //TODO: Generate and return a JWT token

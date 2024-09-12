@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using ToDoListProject.Models;
+using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Pages
 {

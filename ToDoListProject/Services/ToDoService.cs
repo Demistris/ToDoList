@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using ToDoListProject.Models;
+using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Services
 {

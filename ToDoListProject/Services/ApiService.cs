@@ -10,6 +10,7 @@ namespace ToDoListProject.Services
         public ApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
+            _httpClient.BaseAddress = new Uri("https://localhost:44398/"); // Adjust this to match your API's URL
         }
 
         public async Task<User> RegisterUser(RegisterModel registerModel)
