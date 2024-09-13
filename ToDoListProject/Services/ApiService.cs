@@ -10,16 +10,17 @@ namespace ToDoListProject.Services
         public ApiService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("https://localhost:44398/"); // Adjust this to match your API's URL
+            _httpClient.BaseAddress = new Uri("https://localhost:7291/");
         }
 
         public async Task<User> RegisterUser(RegisterModel registerModel)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/register", registerModel);
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<User>();
+            var user = await response.Content.ReadFromJsonAsync<User>();
+            return user;
         }
-        
+
         public async Task<User> LoginUser(LoginModel loginModel)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/login", loginModel);

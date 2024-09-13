@@ -18,8 +18,7 @@ namespace ToDoListProject.Pages.Auth
             catch (HttpRequestException ex)
             {
                 _errorMessage = $"Registration failed: {ex.Message}";
-                Console.WriteLine($"Registration failed: {ex.Message}");
-                Console.WriteLine($"Stack trace: {ex.StackTrace}");
+
                 if (ex.InnerException != null)
                 {
                     Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
@@ -28,12 +27,10 @@ namespace ToDoListProject.Pages.Auth
             catch (JsonException ex)
             {
                 _errorMessage = $"Error parsing response: {ex.Message}";
-                Console.WriteLine($"JSON parsing error: {ex.Message}");
             }
             catch (Exception ex)
             {
                 _errorMessage = ex.Message;
-                Console.WriteLine($"Registration failed: {ex.Message}");
             }
         }
     }

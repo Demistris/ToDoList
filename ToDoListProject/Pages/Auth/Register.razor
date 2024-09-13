@@ -12,8 +12,6 @@
 
 <EditForm Model="@_registerModel" OnValidSubmit="HandleRegistration">
     <DataAnnotationsValidator />
-    @* <ValidationSummary /> *@
-
     <div class="form-group">
         <label for="username">Username:</label>
         <InputText id="username" @bind-Value="_registerModel.Username" class="form-control" />
