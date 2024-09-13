@@ -17,15 +17,18 @@
         <InputText id="username" @bind-Value="_registerModel.Username" class="form-control" />
         <ValidationMessage For="@(() => _registerModel.Username)" />
     </div>
+    <br />
     <div class="form-group">
         <label for="email">Email:</label>
         <InputText id="email" @bind-Value="_registerModel.Email" class="form-control" />
         <ValidationMessage For="@(() => _registerModel.Email)" />
     </div>
+    <br />
     <div class="form-group">
         <label for="password">Password:</label>
         <InputText id="password" @bind-Value="_registerModel.Password" class="form-control" type="password" />
         <ValidationMessage For="@(() => _registerModel.Password)" />
     </div>
+    <br />
     <button type="submit" class="btn btn-primary">Register</button>
 </EditForm>
