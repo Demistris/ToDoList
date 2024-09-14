@@ -3,19 +3,71 @@
 @inject NavigationService Navigation
 @inject ApiService ApiService
 
-<h3>Login</h3>
-
 <EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
     <DataAnnotationsValidator />
-    @* <ValidationSummary /> *@
 
-    <div class="form-group">
-        <label for="username">Username:</label>
-        <InputText id="username" @bind-Value="_loginModel.Username" class="form-control" />
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5">
+                <div class="card shadow-sm rounded">
+                    <!-- Header -->
+                    <div class="card-header" style="background-color: transparent; border-bottom: none; padding-top: 40px;">
+                        <h3 class="text-center font-weight-bold" style="color: #333333;">Login</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Username -->
+                        <div class="form-group mb-4">
+                            <InputText class="form-control" placeholder="Username" @bind-Value="_loginModel.Username" />
+                            <ValidationMessage For="@(() => _loginModel.Username)" />
+                        </div>
+                        <!-- Password with toggle visibility -->
+                        <div class="form-group mb-4">
+                            <div class="password-input-wrapper">
+                                <InputText type="@(_isPasswordVisible ? "text" : "password")" class="form-control" placeholder="Password" @bind-Value="_loginModel.Password" />
+                                <button type="button" class="toggle-password" @onclick="TogglePasswordVisibility">
+                                    <i class="@(_isPasswordVisible ? "fas fa-eye" : "fas fa-eye-slash")"></i>
+                                </button>
+                            </div>
+                            <ValidationMessage For="@(() => _loginModel.Password)" />
+                        </div>
+                        <!-- Forgot Password Link -->
+                        <div class="text-center mb-3">
+                            <a href="/" class="text-primary" style="text-decoration: none; font-size: 0.875rem;">Forgot password?</a>
+                        </div>
+                        <!-- Login Button -->
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary w-100" style="padding: 12px 15px;">Login</button>
+                        </div>
+
+                        <!-- Don't have an account? -->
+                        <div class="text-center mt-3">
+                            <small>
+                                Don't have an account?
+                                <a href="/register" class="text-primary" style="text-decoration: none;">Signup</a>
+                            </small>
+                        </div>
+
+                        <!-- Divider with "Or" -->
+                        <div class="divider-with-text text-center my-4">
+                            <span class="px-2" style="color: #6c757d;">Or</span>
+                        </div>
+
+                        <!-- Social Login Buttons -->
+                        <div class="form-group">
+                            <!-- Facebook Button -->
+                            <button class="btn w-100 mb-3 d-flex align-items-center justify-content-center" style="background-color: #3b5998; color: white; padding: 12px 15px;">
+                                <i class="fa-brands fa-facebook" style="font-size: 1.3rem;"></i>
+                                <span class="flex-grow-1 text-center">Login with Facebook</span>
+                            </button>
+                            <!-- Google Button -->
+                            <button class="btn w-100 d-flex align-items-center justify-content-center" style="background-color: white; color: #6c757d; border: 1px solid #ced4da; padding: 12px 15px;">
+                                <i class="fa-brands fa-google" style="font-size: 1.2rem; color: #6c757d;"></i>
+                                <span class="flex-grow-1 text-center">Login with Google</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <InputText id="password" @bind-Value="_loginModel.Password" class="form-control" type="password" />
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
 </EditForm>

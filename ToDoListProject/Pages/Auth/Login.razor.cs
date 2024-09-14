@@ -5,19 +5,25 @@ namespace ToDoListProject.Pages.Auth
     public partial class Login
     {
         private LoginModel _loginModel = new LoginModel();
+        private bool _isPasswordVisible = false;
 
         private async Task HandleLogin()
         {
-            var user = await ApiService.LoginUser(_loginModel);
-
-            if(user != null)
+            // TODO: Add error messages when incorrect username or password
+            try
             {
+                var user = await ApiService.LoginUser(_loginModel);
                 Navigation.NavigateTo("/");
             }
-            else
+            catch (Exception ex) 
             {
-                // TODO: Handle login failure (e.g., display error message)
+                Console.WriteLine($"Error: {ex.Message}");
             }
+        }
+
+        private void TogglePasswordVisibility()
+        {
+            _isPasswordVisible = !_isPasswordVisible;
         }
     }
 }

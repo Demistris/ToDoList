@@ -6,12 +6,14 @@ namespace ToDoListProject.Pages.Auth
     public partial class Register
     {
         private RegisterModel _registerModel = new RegisterModel();
+        private bool _isPasswordVisible = false;
 
         private async Task HandleRegistration()
         {
             try
             {
                 // TODO: When Username is taken then show that message and do not try to register
+                // TODO: When Email is taken then show that message and do not try to register
                 var user = await ApiService.RegisterUser(_registerModel);
                 Navigation.NavigateTo("/");
             }
@@ -32,6 +34,11 @@ namespace ToDoListProject.Pages.Auth
             {
                 Console.WriteLine($"Error: {ex.Message}");
             }
+        }
+
+        private void TogglePasswordVisibility()
+        {
+            _isPasswordVisible = !_isPasswordVisible;
         }
     }
 }
