@@ -6,18 +6,18 @@ namespace ToDoListProject.Pages.Auth
     public partial class Register
     {
         private RegisterModel _registerModel = new RegisterModel();
-        private string _errorMessage;
 
         private async Task HandleRegistration()
         {
             try
             {
+                // TODO: When Username is taken then show that message and do not try to register
                 var user = await ApiService.RegisterUser(_registerModel);
-                Navigation.NavigateTo("/login");
+                Navigation.NavigateTo("/");
             }
             catch (HttpRequestException ex)
             {
-                _errorMessage = $"Registration failed: {ex.Message}";
+                Console.WriteLine($"Registration failed: {ex.Message}");
 
                 if (ex.InnerException != null)
                 {
@@ -26,11 +26,11 @@ namespace ToDoListProject.Pages.Auth
             }
             catch (JsonException ex)
             {
-                _errorMessage = $"Error parsing response: {ex.Message}";
+                Console.WriteLine($"Error parsing response: {ex.Message}");
             }
             catch (Exception ex)
             {
-                _errorMessage = ex.Message;
+                Console.WriteLine($"Error: {ex.Message}");
             }
         }
     }

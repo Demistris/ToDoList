@@ -1,0 +1,17 @@
+﻿.divider-with-text {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+    .divider-with-text::before,
+    .divider-with-text::after {
+        content: '';
+        flex: 1;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .divider-with-text span {
+        padding: 0 10px;
+    }
