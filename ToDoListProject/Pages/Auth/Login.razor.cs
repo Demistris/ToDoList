@@ -1,4 +1,5 @@
 ﻿using ToDoList.Shared.Models;
+using ToDoListProject.Services;
 
 namespace ToDoListProject.Pages.Auth
 {
@@ -14,8 +15,10 @@ namespace ToDoListProject.Pages.Auth
 
             try
             {
-                var user = await ApiService.LoginUser(_loginModel);
+                var loginResponse = await ApiService.LoginUser(_loginModel);
+                await LocalStorageService.SetItemAsync<string>("JwtToken", loginResponse.Token);
                 Navigation.NavigateTo("/");
+                Console.WriteLine("loginResponse.Token: " + loginResponse.Token);
             }
             catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {

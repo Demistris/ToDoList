@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TodoList.Shared.Models;
 using ToDoList.Shared.CustomExceptions;
 using ToDoList.Shared.Models;
 using ToDoListApi.Services;
@@ -17,7 +18,7 @@ namespace ToDoListApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterModel registerModel)
+        public async Task<ActionResult<Response>> Register(RegisterModel registerModel)
         {
             try
             {
@@ -35,7 +36,7 @@ namespace ToDoListApi.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginModel loginModel)
+        public async Task<ActionResult<Response>> Login(LoginModel loginModel)
         {
             var user = await _userService.AuthenticateUser(loginModel.Email, loginModel.Password);
 
@@ -44,8 +45,12 @@ namespace ToDoListApi.Controllers
                 return Unauthorized("Invalid email or password");
             }
 
-            //TODO: Generate and return a JWT token
-            return Ok(user);
+            if (user.Success)
+            {
+                return Ok(user);
+            }
+
+            return BadRequest(user);
         }
     }
 }

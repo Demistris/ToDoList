@@ -1,10 +1,12 @@
-﻿using ToDoList.Shared.Models;
+﻿using TodoList.Shared.Models;
+using ToDoList.Shared.Models;
 
 namespace ToDoListApi.Services
 {
     public interface IUserService
     {
-        Task<User> RegisterUser(string username, string email, string password);
-        Task<User> AuthenticateUser(string email, string password);
+        Task<Response> RegisterUser(string username, string email, string password);
+        Task<Response> AuthenticateUser(string email, string password);
+        string GenerateJwtToken(User user);
     }
 }

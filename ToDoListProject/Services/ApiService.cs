@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using TodoList.Shared.Models;
 using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Services
@@ -13,7 +14,7 @@ namespace ToDoListProject.Services
             _httpClient.BaseAddress = new Uri("https://localhost:7291/");
         }
 
-        public async Task<User> RegisterUser(RegisterModel registerModel)
+        public async Task<Response> RegisterUser(RegisterModel registerModel)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/register", registerModel);
 
@@ -24,10 +25,10 @@ namespace ToDoListProject.Services
             }
 
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<User>();
+            return await response.Content.ReadFromJsonAsync<Response>();
         }
 
-        public async Task<User> LoginUser(LoginModel loginModel)
+        public async Task<Response> LoginUser(LoginModel loginModel)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/login", loginModel);
 
@@ -37,7 +38,7 @@ namespace ToDoListProject.Services
             }
 
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<User>();
+            return await response.Content.ReadFromJsonAsync<Response>();
         }
     }
 }
