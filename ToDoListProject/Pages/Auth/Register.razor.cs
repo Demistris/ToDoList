@@ -7,31 +7,31 @@ namespace ToDoListProject.Pages.Auth
     {
         private RegisterModel _registerModel = new RegisterModel();
         private bool _isPasswordVisible = false;
+        private string _errorMessage = string.Empty;
 
         private async Task HandleRegistration()
         {
             try
             {
-                // TODO: When Username is taken then show that message and do not try to register
-                // TODO: When Email is taken then show that message and do not try to register
                 var user = await ApiService.RegisterUser(_registerModel);
                 Navigation.NavigateTo("/");
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"Registration failed: {ex.Message}");
-
-                if (ex.InnerException != null)
+                if (ex.StatusCode == System.Net.HttpStatusCode.Conflict)
                 {
-                    Console.WriteLine($"Inner exception: {ex.InnerException.Message}");
+                    _errorMessage = "The email address is already registered.";
+                    Console.WriteLine($"Error: {ex.Message}");
                 }
-            }
-            catch (JsonException ex)
-            {
-                Console.WriteLine($"Error parsing response: {ex.Message}");
+                else
+                {
+                    _errorMessage = "An error occurred during registration. Please try again.";
+                    Console.WriteLine($"Registration failed: {ex.Message}");
+                }
             }
             catch (Exception ex)
             {
+                _errorMessage = "An unexpected error occurred. Please try again later.";
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }

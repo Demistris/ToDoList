@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Text;
 using ToDoListApi.Database;
 using ToDoList.Shared.Models;
+using ToDoList.Shared.CustomExceptions;
 
 namespace ToDoListApi.Services
 {
@@ -19,7 +20,7 @@ namespace ToDoListApi.Services
         {
             if(await _context.Users.AnyAsync(u => u.Username == username || u.Email == email))
             {
-                throw new Exception("Username or email already exists");
+                throw new EmailAlreadyExistsException();
             }
 
             var user = new User

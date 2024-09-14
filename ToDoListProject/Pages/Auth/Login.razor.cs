@@ -6,17 +6,24 @@ namespace ToDoListProject.Pages.Auth
     {
         private LoginModel _loginModel = new LoginModel();
         private bool _isPasswordVisible = false;
+        private string _errorMessage = string.Empty;
 
         private async Task HandleLogin()
         {
-            // TODO: Add error messages when incorrect username or password
+            _errorMessage = string.Empty;
+
             try
             {
                 var user = await ApiService.LoginUser(_loginModel);
                 Navigation.NavigateTo("/");
             }
-            catch (Exception ex) 
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
+                _errorMessage = "Incorrect username or password.";
+            }
+            catch (Exception ex)
+            {
+                _errorMessage = "An error occurred. Please try again.";
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ToDoList.Shared.CustomExceptions;
 using ToDoList.Shared.Models;
 using ToDoListApi.Services;
 
@@ -22,6 +23,10 @@ namespace ToDoListApi.Controllers
             {
                 var user = await _userService.RegisterUser(registerModel.Username, registerModel.Email, registerModel.Password);
                 return Ok(user);
+            }
+            catch (EmailAlreadyExistsException)
+            {
+                return Conflict(new { message = "Email is already registered" });
             }
             catch (Exception ex)
             {

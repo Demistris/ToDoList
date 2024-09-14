@@ -16,14 +16,26 @@ namespace ToDoListProject.Services
         public async Task<User> RegisterUser(RegisterModel registerModel)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/register", registerModel);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                var errorResponse = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
+                throw new HttpRequestException(errorResponse["message"], null, response.StatusCode);
+            }
+
             response.EnsureSuccessStatusCode();
-            var user = await response.Content.ReadFromJsonAsync<User>();
-            return user;
+            return await response.Content.ReadFromJsonAsync<User>();
         }
 
         public async Task<User> LoginUser(LoginModel loginModel)
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/login", loginModel);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                throw new HttpRequestException("Unauthorized", null, System.Net.HttpStatusCode.Unauthorized);
+            }
+
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<User>();
         }
