@@ -37,11 +37,11 @@ namespace ToDoListApi.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
-            var user = await _userService.AuthenticateUser(loginModel.Username, loginModel.Password);
+            var user = await _userService.AuthenticateUser(loginModel.Email, loginModel.Password);
 
             if(user == null)
             {
-                return Unauthorized("Invalid username or password");
+                return Unauthorized("Invalid email or password");
             }
 
             //TODO: Generate and return a JWT token

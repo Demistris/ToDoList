@@ -21,10 +21,10 @@
                             <div class="alert alert-danger">@_errorMessage</div>
                         }
 
-                        <!-- Username -->
+                        <!-- Email -->
                         <div class="form-group mb-4">
-                            <InputText class="form-control" placeholder="Username" @bind-Value="_loginModel.Username" />
-                            <ValidationMessage For="@(() => _loginModel.Username)" />
+                            <InputText type="email" class="form-control" placeholder="Email" @bind-Value="_loginModel.Email" />
+                            <ValidationMessage For="@(() => _loginModel.Email)" />
                         </div>
                         <!-- Password with toggle visibility -->
                         <div class="form-group mb-4">

@@ -19,7 +19,7 @@ namespace ToDoListProject.Pages.Auth
             }
             catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                _errorMessage = "Incorrect username or password.";
+                _errorMessage = "Incorrect email or password.";
             }
             catch (Exception ex)
             {

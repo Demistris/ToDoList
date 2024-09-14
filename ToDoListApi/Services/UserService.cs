@@ -18,7 +18,7 @@ namespace ToDoListApi.Services
 
         public async Task<User> RegisterUser(string username, string email, string password)
         {
-            if(await _context.Users.AnyAsync(u => u.Username == username || u.Email == email))
+            if(await _context.Users.AnyAsync(u => u.Email == email))
             {
                 throw new EmailAlreadyExistsException();
             }
@@ -35,11 +35,11 @@ namespace ToDoListApi.Services
             return user;
         }
 
-        public async Task<User> AuthenticateUser(string username, string password)
+        public async Task<User> AuthenticateUser(string email, string password)
         {
             var user = await _context.Users
                 .Include(u => u.ToDoLists)
-                .FirstOrDefaultAsync(u => u.Username == username);
+                .FirstOrDefaultAsync(u => u.Email == email);
 
             if (user == null || !VerifyPassword(password, user.PasswordHash))
             {
