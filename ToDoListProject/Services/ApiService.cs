@@ -32,9 +32,16 @@ namespace ToDoListProject.Services
         {
             var response = await _httpClient.PostAsJsonAsync("api/user/login", loginModel);
 
+            // Handle Unauthorized status
             if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 throw new HttpRequestException("Unauthorized", null, System.Net.HttpStatusCode.Unauthorized);
+            }
+
+            // Handle BadRequest
+            if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                throw new HttpRequestException("Bad Request", null, System.Net.HttpStatusCode.BadRequest);
             }
 
             response.EnsureSuccessStatusCode();

@@ -46,15 +46,15 @@ namespace ToDoListProject.Provider
             return Convert.FromBase64String(base64);
         }
 
-        public void NotifyUserAuthentication()
+        public void NotifyUserAuthentication(string token)
         {
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-        }
+            // Parse claims from the token
+            var claims = ParseClaimsFromJwt(token);
+            var authenticatedUser = new ClaimsPrincipal(new ClaimsIdentity(claims, "jwtAuthType"));
 
-        public async Task LogoutAsync()
-        {
-            await _localStorageService.RemoveItemAsync("JwtToken");
-            NotifyUserLogout();
+            // Notify the UI of state change
+            var authState = Task.FromResult(new AuthenticationState(authenticatedUser));
+            NotifyAuthenticationStateChanged(authState);
         }
 
         public void NotifyUserLogout()

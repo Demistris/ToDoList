@@ -41,7 +41,7 @@ namespace ToDoListProject.Pages.Auth
                 }
                 else
                 {
-                    _errorMessage = "An error occurred during registration. Please try again.";
+                    _errorMessage = "An error occurred during signing up. Please try again.";
                     Console.WriteLine($"Registration failed: {ex.Message}");
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using ToDoList.Shared.Models;
+using ToDoListProject.Provider;
 using ToDoListProject.Services;
 
 namespace ToDoListProject.Pages.Auth
@@ -34,16 +35,25 @@ namespace ToDoListProject.Pages.Auth
             {
                 var loginResponse = await ApiService.LoginUser(_loginModel);
                 await LocalStorageService.SetItemAsync<string>("JwtToken", loginResponse.Token);
+
+                // Notify the authentication state provider of login
+                var customAuthStateProvider = (CustomAuthStateProvider)AuthenticationStateProvider;
+                customAuthStateProvider.NotifyUserAuthentication(loginResponse.Token);
+
                 Navigation.NavigateTo("/");
-                Console.WriteLine("loginResponse.Token: " + loginResponse.Token);
+
             }
             catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
                 _errorMessage = "Incorrect email or password.";
             }
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            {
+                _errorMessage = "An error occurred during signing in. Please try again.";
+            }
             catch (Exception ex)
             {
-                _errorMessage = "An error occurred. Please try again.";
+                _errorMessage = "An unexpected error occurred. Please try again later.";
                 Console.WriteLine($"Error: {ex.Message}");
             }
         }

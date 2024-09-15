@@ -40,17 +40,12 @@ namespace ToDoListApi.Controllers
         {
             var user = await _userService.AuthenticateUser(loginModel.Email, loginModel.Password);
 
-            if(user == null)
+            if (user == null || !user.Success)
             {
                 return Unauthorized("Invalid email or password");
             }
 
-            if (user.Success)
-            {
-                return Ok(user);
-            }
-
-            return BadRequest(user);
+            return Ok(user);
         }
     }
 }
