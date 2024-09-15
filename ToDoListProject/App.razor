@@ -1,7 +1,22 @@
-﻿<CascadingAuthenticationState>
+﻿@using ToDoListProject.Pages.Auth
+@using ToDoListProject.Services
+@inject NavigationService Navigation
+
+<CascadingAuthenticationState>
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
-            <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    @if (routeData.PageType == typeof(Login))
+                    {
+                        Navigation.NavigateTo("/");
+                    }
+                    else
+                    {
+                        <p>You are not authorized to access this page.</p>
+                }
+                </NotAuthorized>
+            </AuthorizeRouteView>
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
         </Found>
         <NotFound>

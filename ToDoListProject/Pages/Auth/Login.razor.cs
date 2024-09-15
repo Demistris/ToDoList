@@ -1,4 +1,5 @@
-﻿using ToDoList.Shared.Models;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using ToDoList.Shared.Models;
 using ToDoListProject.Services;
 
 namespace ToDoListProject.Pages.Auth
@@ -8,6 +9,22 @@ namespace ToDoListProject.Pages.Auth
         private LoginModel _loginModel = new LoginModel();
         private bool _isPasswordVisible = false;
         private string _errorMessage = string.Empty;
+
+        protected override async Task OnInitializedAsync()
+        {
+            await CheckIfAuthenticated();
+        }
+
+        private async Task CheckIfAuthenticated()
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                Navigation.NavigateTo("/");
+            }
+        }
 
         private async Task HandleLogin()
         {

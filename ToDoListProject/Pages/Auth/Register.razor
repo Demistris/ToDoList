@@ -2,6 +2,7 @@
 @using ToDoListProject.Services
 @inject NavigationService Navigation
 @inject ApiService ApiService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <EditForm Model="@_registerModel" OnValidSubmit="HandleRegistration">
     <DataAnnotationsValidator />

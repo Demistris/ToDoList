@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+﻿using Microsoft.AspNetCore.Components.Authorization;
 using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Pages.Auth
@@ -8,6 +8,22 @@ namespace ToDoListProject.Pages.Auth
         private RegisterModel _registerModel = new RegisterModel();
         private bool _isPasswordVisible = false;
         private string _errorMessage = string.Empty;
+
+        protected override async Task OnInitializedAsync()
+        {
+            await CheckIfAuthenticated();
+        }
+
+        private async Task CheckIfAuthenticated()
+        {
+            var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity != null && user.Identity.IsAuthenticated)
+            {
+                Navigation.NavigateTo("/");
+            }
+        }
 
         private async Task HandleRegistration()
         {

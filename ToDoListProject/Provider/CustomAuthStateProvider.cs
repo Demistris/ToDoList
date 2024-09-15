@@ -1,7 +1,5 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using System.Buffers.Text;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text.Json;
 

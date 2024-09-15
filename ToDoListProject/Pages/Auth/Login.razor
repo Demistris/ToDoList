@@ -1,10 +1,12 @@
 ﻿@page "/login"
 @using ToDoListProject.Services
 @using Blazored.LocalStorage
+@using ToDoListProject.Provider
 @inject NavigationService Navigation
 @inject ApiService ApiService
 @inject ILocalStorageService LocalStorageService
 @inject IJSRuntime JSRuntime
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
     <DataAnnotationsValidator />
