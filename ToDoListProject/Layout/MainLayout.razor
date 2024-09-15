@@ -1,8 +1,11 @@
-﻿@using ToDoListProject.Services
+﻿@using Blazored.LocalStorage
+@using ToDoListProject.Provider
+@using ToDoListProject.Services
 @using System.Security.Claims
 @inherits LayoutComponentBase
 @inject NavigationService Navigation
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ILocalStorageService LocalStorageService
 
 <div class="page">
     <AuthorizeView>
@@ -46,6 +49,9 @@
 
     private async Task HandleLogout()
     {
-        
+        await LocalStorageService.RemoveItemAsync("JwtToken");
+        var customAuthStateProvider = (CustomAuthStateProvider)AuthenticationStateProvider;
+        customAuthStateProvider.NotifyUserLogout();
+        Navigation.NavigateTo("/");
     }
 }

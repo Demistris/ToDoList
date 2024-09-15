@@ -51,6 +51,12 @@ namespace ToDoListProject.Provider
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
 
+        public async Task LogoutAsync()
+        {
+            await _localStorageService.RemoveItemAsync("JwtToken");
+            NotifyUserLogout();
+        }
+
         public void NotifyUserLogout()
         {
             var anonymousUser = new ClaimsPrincipal(new ClaimsIdentity());
