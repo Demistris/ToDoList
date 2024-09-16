@@ -71,20 +71,29 @@
     private bool collapseNavMenu = true;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
-    private List<ToDoListModel> _lists;
+    private List<ToDoListModel> _lists = new List<ToDoListModel>();
+    private ToDoListModel _newList;
     private string _editingListId;
     private string _editingListName;
+    private string _searchTerm = string.Empty;
     private int _uncompletedCount;
-    private string _searchTerm = "";
 
     private List<ToDoListModel> _filteredLists => _lists.Where(list => list.ListName.Contains(_searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-        base.OnInitialized();
-        _lists = ToDoService.GetAllLists();
-        ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
-        ToDoService.ListUpdated += MyObject_ListUpdated;
+        try
+        {
+            var allLists = await ToDoService.GetAllListsAsync();
+            _lists = allLists ?? new List<ToDoListModel>();
+
+            ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
+            ToDoService.ListUpdated += MyObject_ListUpdated;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading lists: {ex.Message}");
+        }
     }
 
     private void MyObject_ListNameChanged(object sender, EventArgs e)
@@ -104,15 +113,27 @@
 
     private async Task AddNewList()
     {
-        var newList = await ToDoService.AddList();
+        // Create a new empty list and send the API request
+        _newList = new ToDoListModel { ListName = "" };
+        var createdList = await ToDoService.AddListAsync(_newList);
 
-        if (newList != null)
+        if (createdList != null)
         {
-            _editingListId = newList.Id;
-            _editingListName = "";
+            // Add it to the local list to show in the UI
+            _lists.Add(createdList);
+
+            _editingListId = createdList.Id;
+            _editingListName = createdList.ListName;
+            Console.WriteLine($"createdList.Id: {createdList.Id}");
+
             StateHasChanged();
 
-            await FocusNewInput(newList.Id);
+            await FocusNewInput(_newList.Id);
+
+        }
+        else
+        {
+            Console.WriteLine("Failed to create new list.");
         }
     }
 
@@ -135,7 +156,7 @@
 
         list.ListName = _editingListName;
         _editingListId = null;
-        await ToDoService.UpdateList(list);
+        await ToDoService.UpdateListAsync(list);
         NavigationService.NavigateToList($"{list.Id}");
         StateHasChanged();
     }
@@ -145,11 +166,13 @@
         int counter = 1;
         string baseName = "Untitled";
         string newName;
+
         do
         {
             newName = $"{baseName}{counter}";
             counter++;
-        } while (ToDoService.GetAllLists().Any(l => l.ListName == newName));
+        } while (_lists.Any(l => l.ListName == newName));
+        
         return newName;
     }
 }

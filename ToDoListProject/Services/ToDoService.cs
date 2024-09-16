@@ -1,55 +1,102 @@
-﻿using Blazorise;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Services
 {
     public class ToDoService
     {
-        public List<ToDoListModel> GetAllLists() => _toDoLists;
         public event EventHandler ListUpdated;
 
-        private List<ToDoListModel> _toDoLists = new List<ToDoListModel>();
-        private string _newListName = "Untitled";
         private readonly NavigationService _navigationService;
+        private readonly ApiService _apiService;
+        private readonly AuthenticationStateProvider _authenticationStateProvider;
+        private List<ToDoListModel> _toDoLists = new List<ToDoListModel>();
         private ConcurrentDictionary<string, int> _uncompletedCounts = new ConcurrentDictionary<string, int>();
 
-        public ToDoService(NavigationService navigationService)
+        public ToDoService(NavigationService navigationService, ApiService apiService, AuthenticationStateProvider authenticationStateProvider)
         {
             _navigationService = navigationService;
+            _apiService = apiService;
+            _authenticationStateProvider = authenticationStateProvider;
         }
 
-        public async Task<ToDoListModel> AddList()
+        public async Task<List<ToDoListModel>> GetAllListsAsync()
         {
-            var newList = new ToDoListModel
+            _toDoLists = await _apiService.GetAllToDoListsAsync();
+            return _toDoLists;
+        }
+
+        public async Task<ToDoListModel> AddListAsync(ToDoListModel newList)
+        {
+            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            if (user.Identity.IsAuthenticated)
             {
-                ListName = _newListName,
-                Items = new List<ToDoItem>()
-            };
+                var userIdClaim = user.FindFirst("UserId");
 
-            _toDoLists.Add(newList);
-            await Task.CompletedTask;
+                if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+                {
+                    newList.UserId = userId;
+                    var addedList = await _apiService.AddToDoListAsync(newList);
 
-            return newList;
+                    if (addedList == null)
+                    {
+                        throw new Exception("Failed to add the new list. The response from the server was null.");
+                    }
+
+                    return addedList;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid or missing UserId claim");
+                    throw new UnauthorizedAccessException("UserId claim is missing or invalid.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("User is not authenticated");
+                throw new UnauthorizedAccessException("User is not authenticated.");
+            }
         }
 
-        protected virtual void OnListUpdated(EventArgs e)
+        public async Task<bool> UpdateListAsync(ToDoListModel updatedList)
         {
-            ListUpdated?.Invoke(this, e);
+            try
+            {
+                await _apiService.UpdateToDoListAsync(updatedList);
+
+                var index = _toDoLists.FindIndex(l => l.Id == updatedList.Id);
+
+                if (index != -1)
+                {
+                    _toDoLists[index] = updatedList;
+                    OnListUpdated(EventArgs.Empty);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating list: {ex.Message}");
+                return false;
+            }
         }
 
-        public void DeleteList(string listId)
+        public async Task DeleteListAsync(string listId)
         {
+            await _apiService.DeleteToDoListAsync(listId);
+
             var listToDelete = _toDoLists.FirstOrDefault(l => l.Id == listId);
 
-            if (listToDelete != null)
+            if(listToDelete != null)
             {
                 _toDoLists.Remove(listToDelete);
                 OnListUpdated(EventArgs.Empty);
 
-                if (_toDoLists.Any())
+                if(_toDoLists.Any())
                 {
                     _navigationService.NavigateToList($"{_toDoLists.First().Id}");
                 }
@@ -60,19 +107,10 @@ namespace ToDoListProject.Services
             }
         }
 
-        public async Task UpdateList(ToDoListModel updatedList)
+        protected virtual void OnListUpdated(EventArgs e)
         {
-            var index = _toDoLists.FindIndex(l => l.Id == updatedList.Id);
-
-            if (index != -1)
-            {
-                _toDoLists[index] = updatedList;
-            }
-
-            await Task.CompletedTask;
+            ListUpdated?.Invoke(this, e);
         }
-
-        public ToDoListModel GetList(string listId) => _toDoLists.FirstOrDefault(l => l.Id == listId);
 
         public void SetUncompletedCount(string listId, int count)
         {

@@ -29,11 +29,11 @@ namespace ToDoListProject.Pages
         private bool _shouldFocusInput = false;
         private bool _preventDefault;
 
-        protected override void OnParametersSet()
+        protected override async Task OnParametersSetAsync()
         {
             if (!string.IsNullOrEmpty(ListId))
             {
-                ToDoListModel = ToDoService.GetList(ListId);
+                ToDoListModel = await ApiService.GetToDoListAsync(ListId);
 
                 if (ToDoListModel != null)
                 {
@@ -63,7 +63,7 @@ namespace ToDoListProject.Pages
             }
         }
 
-        private void AddNewItem()
+        private async void AddNewItem()
         {
             if (string.IsNullOrWhiteSpace(_newToDoItem.Description))
             {
@@ -90,12 +90,12 @@ namespace ToDoListProject.Pages
                     ToDoListModel.Items.Add(newItem);
                     _uncompletedToDoItems.Add(newItem);
                     _newToDoItem.Description = string.Empty;
-                    _ = OnUpdateListAsync();
+                    await OnUpdateListAsync();
                 }
             }
         }
 
-        private void UpdateItemCompletionStatus(ToDoItem toDoItem)
+        private async void UpdateItemCompletionStatus(ToDoItem toDoItem)
         {
             if (toDoItem == null || ToDoListModel == null)
             {
@@ -125,10 +125,10 @@ namespace ToDoListProject.Pages
                 }
             }
 
-            _ = OnUpdateListAsync();
+            await OnUpdateListAsync();
         }
 
-        private void HandleDeleteItem(ToDoItem toDoItem)
+        private async void HandleDeleteItem(ToDoItem toDoItem)
         {
             if (toDoItem == null || ToDoListModel == null)
             {
@@ -146,7 +146,7 @@ namespace ToDoListProject.Pages
 
             ToDoListModel.Items.Remove(toDoItem);
 
-            _ = OnUpdateListAsync();
+            await OnUpdateListAsync();
         }
 
         private void HandleReorder((int OldIndex, int NewIndex) reorderInfo)
@@ -155,7 +155,7 @@ namespace ToDoListProject.Pages
             ReorderToDos(oldIndex, newIndex);
         }
 
-        public void ReorderToDos(int oldIndex, int newIndex)
+        public async void ReorderToDos(int oldIndex, int newIndex)
         {
             var toDos = _uncompletedToDoItems;
             var itemToMove = toDos[oldIndex];
@@ -170,7 +170,7 @@ namespace ToDoListProject.Pages
                 toDos.Add(itemToMove);
             }
 
-            _ = OnUpdateListAsync();
+            await OnUpdateListAsync();
         }
 
         public int HowManyUncompletedToDos()
@@ -198,7 +198,7 @@ namespace ToDoListProject.Pages
         private async Task OnUpdateListAsync()
         {
             ToDoService.SetUncompletedCount(ListId, HowManyUncompletedToDos());
-            await ToDoService.UpdateList(ToDoListModel);
+            await ApiService.UpdateToDoListAsync(ToDoListModel);
 
             StateHasChanged();
         }
@@ -213,7 +213,7 @@ namespace ToDoListProject.Pages
             StateHasChanged();
         }
 
-        private void SaveEdit()
+        private async void SaveEdit()
         {
             if (!string.IsNullOrWhiteSpace(_editListName))
             {
@@ -221,15 +221,15 @@ namespace ToDoListProject.Pages
 
                 ToDoListModel.ListName = _editListName;
                 OnListNameChanged(EventArgs.Empty);
-                _ = OnUpdateListAsync();
+                await OnUpdateListAsync();
             }
 
             _isEditing = false;
         }
 
-        private void DeleteList()
+        private async void DeleteList()
         {
-            ToDoService.DeleteList(ListId);
+            await ApiService.DeleteToDoListAsync(ListId);
             StateHasChanged();
         }
 

@@ -41,7 +41,7 @@ namespace ToDoListApi.Migrations
 
                     b.HasIndex("ToDoListModelId");
 
-                    b.ToTable("ToDoItems");
+                    b.ToTable("ToDoItems", (string)null);
                 });
 
             modelBuilder.Entity("ToDoList.Shared.Models.ToDoListModel", b =>
@@ -60,7 +60,7 @@ namespace ToDoListApi.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ToDoLists");
+                    b.ToTable("ToDoLists", (string)null);
                 });
 
             modelBuilder.Entity("ToDoList.Shared.Models.User", b =>
@@ -85,7 +85,7 @@ namespace ToDoListApi.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ToDoList.Shared.Models.ToDoItem", b =>

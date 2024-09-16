@@ -5,7 +5,6 @@ using ToDoListApi.Database;
 using ToDoList.Shared.Models;
 using ToDoList.Shared.CustomExceptions;
 using TodoList.Shared.Models;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

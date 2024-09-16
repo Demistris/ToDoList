@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using System.Globalization;
+using System.Net.Http.Json;
 using TodoList.Shared.Models;
 using ToDoList.Shared.Models;
 
@@ -47,5 +48,42 @@ namespace ToDoListProject.Services
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<Response>();
         }
+
+        #region ToDoList Service
+
+        public async Task<List<ToDoListModel>> GetAllToDoListsAsync()
+        {
+            var response = await _httpClient.GetAsync("api/todolist");
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<List<ToDoListModel>>();
+        }
+
+        public async Task<ToDoListModel> GetToDoListAsync(string listId)
+        {
+            return await _httpClient.GetFromJsonAsync<ToDoListModel>($"api/todolist/{listId}");
+        }
+
+        public async Task<ToDoListModel> AddToDoListAsync(ToDoListModel newList)
+        {
+            Console.WriteLine($"Sending new list: {System.Text.Json.JsonSerializer.Serialize(newList)}");
+
+            var response = await _httpClient.PostAsJsonAsync("api/todolist", newList);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<ToDoListModel>();
+        }
+
+        public async Task UpdateToDoListAsync(ToDoListModel updatedList)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/todolist/{updatedList.Id}", updatedList);
+            response.EnsureSuccessStatusCode();
+        }
+
+        public async Task DeleteToDoListAsync(string listId)
+        {
+            var response = await _httpClient.DeleteAsync($"api/todolist/{listId}");
+            response.EnsureSuccessStatusCode();
+        }
+
+        #endregion
     }
 }

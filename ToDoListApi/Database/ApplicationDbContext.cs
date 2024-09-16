@@ -20,7 +20,7 @@ namespace ToDoListApi.Database
 
             modelBuilder.Entity<User>()
                 .HasMany(u => u.ToDoLists)
-                .WithOne(t => t.User)
+                .WithOne()
                 .HasForeignKey(t => t.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 

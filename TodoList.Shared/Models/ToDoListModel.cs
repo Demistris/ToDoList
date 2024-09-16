@@ -10,6 +10,5 @@ namespace ToDoList.Shared.Models
         public List<ToDoItem> Items { get; set; } = new List<ToDoItem>();
 
         public int UserId { get; set; }
-        public User User { get; set; }
     }
 }
