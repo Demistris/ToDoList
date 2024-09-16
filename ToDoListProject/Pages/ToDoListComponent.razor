@@ -3,11 +3,16 @@
 @using ToDoListProject.Services
 @inject ToDoService ToDoService
 @inject ApiService ApiService
+@inject HttpClient Http
 
 <div>
-    @if (ToDoListModel == null)
+    @if (_isLoading)
     {
-        <p>List not found!</p>
+        <p>Loading...</p>
+    }
+    else if (ToDoListModel == null)
+    {
+        <p>List not found</p>
     }
     else
     {

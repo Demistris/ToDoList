@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 using System.Collections.Generic;
+using System.Net.Http.Json;
 using System.Net.NetworkInformation;
 using ToDoList.Shared.Models;
 using ToDoListProject.Services;
@@ -28,6 +29,7 @@ namespace ToDoListProject.Pages
         private ElementReference _editInputElement;
         private bool _shouldFocusInput = false;
         private bool _preventDefault;
+        private bool _isLoading = true;
 
         protected override async Task OnParametersSetAsync()
         {
@@ -40,6 +42,26 @@ namespace ToDoListProject.Pages
                     _uncompletedToDoItems = ToDoListModel.Items.Where(i => !i.Completed).ToList();
                     _completedToDoItems = ToDoListModel.Items.Where(i => i.Completed).ToList();
                 }
+
+                await LoadTodoList();
+            }
+        }
+
+        private async Task LoadTodoList()
+        {
+            _isLoading = true;
+
+            try
+            {
+                ToDoListModel = await Http.GetFromJsonAsync<ToDoListModel>($"api/todolist/{ListId}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error loading todo list: {ex.Message}");
+            }
+            finally
+            {
+                _isLoading = false;
             }
         }
 
