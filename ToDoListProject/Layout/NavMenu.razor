@@ -98,6 +98,16 @@
 
     private void MyObject_ListNameChanged(object sender, EventArgs e)
     {
+        if (sender is ToDoListComponent updatedList)
+        {
+            var index = _lists.FindIndex(l => l.Id == updatedList.ListId);
+
+            if(index != -1)
+            {
+                _lists[index].ListName = updatedList.ToDoListModel.ListName;
+            }
+        }
+
         InvokeAsync(StateHasChanged);
     }
 
