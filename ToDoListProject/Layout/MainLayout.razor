@@ -41,6 +41,14 @@
 </div>
 
 @code {
+    private AuthenticationState authState;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var customAuthStateProvider = (CustomAuthStateProvider)AuthenticationStateProvider;
+        authState = await customAuthStateProvider.GetAuthenticationStateAsync();
+    }
+
     private string DisplayInfo(List<Claim> claims)
     {
         var username = claims.Where(u => u.Type.Equals("Username")).Select(u => u.Value).FirstOrDefault();

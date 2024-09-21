@@ -1,5 +1,6 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -18,12 +19,49 @@ namespace ToDoListProject.Provider
         {
             var token = await _localStorageService.GetItemAsync<string>("JwtToken");
 
-            if (string.IsNullOrEmpty(token))
+            if (string.IsNullOrEmpty(token) || IsTokenExpired(token))
             {
+                await _localStorageService.RemoveItemAsync("authToken");
                 return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity()));
             }
 
-            return new AuthenticationState(new ClaimsPrincipal(new ClaimsIdentity(ParseClaimsFromJwt(token), "jwt")));
+            // Set claims based on token
+            var claims = ParseClaimsFromJwt(token);
+            var identity = new ClaimsIdentity(claims, "jwt");
+            var user = new ClaimsPrincipal(identity);
+
+            return new AuthenticationState(user);
+        }
+
+        public static bool IsTokenExpired(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return true;
+            }
+
+            var jwtHandler = new JwtSecurityTokenHandler();
+
+            if (!jwtHandler.CanReadToken(token))
+            {
+                return true;
+            }
+
+            var jwtToken = jwtHandler.ReadJwtToken(token);
+
+            // Find the expiration claim
+            var expClaim = jwtToken.Claims.FirstOrDefault(claim => claim.Type.Equals("exp"));
+
+            if (expClaim == null)
+            {
+                return true;
+            }
+
+            // Convert exp claim value (in seconds since Unix epoch) to a DateTime
+            var expirationTime = DateTimeOffset.FromUnixTimeSeconds(long.Parse(expClaim.Value)).UtcDateTime;
+
+            // Compare with current UTC time
+            return DateTime.UtcNow >= expirationTime;
         }
 
         private IEnumerable<Claim>? ParseClaimsFromJwt(string jwt)
