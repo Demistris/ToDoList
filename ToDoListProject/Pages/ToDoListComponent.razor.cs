@@ -251,7 +251,7 @@ namespace ToDoListProject.Pages
 
         private async void DeleteList()
         {
-            await ApiService.DeleteToDoListAsync(ListId);
+            await ToDoService.DeleteListAsync(ListId);
             StateHasChanged();
         }
 
