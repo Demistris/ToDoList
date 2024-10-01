@@ -52,7 +52,7 @@ namespace ToDoListProject.Pages
             StateHasChanged();
         }
 
-        private void SaveEdit()
+        private async Task SaveEdit()
         {
             if (!string.IsNullOrWhiteSpace(_editDescription))
             {
@@ -62,7 +62,7 @@ namespace ToDoListProject.Pages
                 }
 
                 Item.Description = _editDescription;
-                OnUpdate.InvokeAsync(Item);
+                await OnUpdate.InvokeAsync(Item);
             }
 
             _isEditing = false;

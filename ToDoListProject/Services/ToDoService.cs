@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Services
@@ -22,43 +23,62 @@ namespace ToDoListProject.Services
             _authenticationStateProvider = authenticationStateProvider;
         }
 
+        #region ToDoLists
+
         public async Task<List<ToDoListModel>> GetAllListsAsync()
         {
-            _toDoLists = await _apiService.GetAllToDoListsAsync();
-            return _toDoLists;
+            try
+            {
+                _toDoLists = await _apiService.GetAllToDoListsAsync();
+                return _toDoLists;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting all lists: {ex.Message}");
+                throw new Exception($"Error getting all lists: {ex.Message}");
+            }
+            
         }
 
         public async Task<ToDoListModel> AddListAsync(ToDoListModel newList)
         {
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user.Identity.IsAuthenticated)
+            try
             {
-                var userIdClaim = user.FindFirst("UserId");
+                var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
 
-                if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
+                if (user.Identity.IsAuthenticated)
                 {
-                    newList.UserId = userId;
-                    var addedList = await _apiService.AddToDoListAsync(newList);
+                    var userIdClaim = user.FindFirst("UserId");
 
-                    if (addedList == null)
+                    if (userIdClaim != null && int.TryParse(userIdClaim.Value, out int userId))
                     {
-                        throw new Exception("Failed to add the new list. The response from the server was null.");
-                    }
+                        newList.UserId = userId;
+                        var addedList = await _apiService.AddToDoListAsync(newList);
 
-                    return addedList;
+                        if (addedList == null)
+                        {
+                            throw new Exception("Failed to add the new list. The response from the server was null.");
+                        }
+
+                        return addedList;
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid or missing UserId claim");
+                        throw new UnauthorizedAccessException("UserId claim is missing or invalid.");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine("Invalid or missing UserId claim");
-                    throw new UnauthorizedAccessException("UserId claim is missing or invalid.");
+                    Console.WriteLine("User is not authenticated");
+                    throw new UnauthorizedAccessException("User is not authenticated.");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("User is not authenticated");
-                throw new UnauthorizedAccessException("User is not authenticated.");
+                Console.WriteLine($"Error adding new list: {ex.Message}");
+                throw new Exception($"Error adding new list: {ex.Message}");
             }
         }
 
@@ -81,30 +101,39 @@ namespace ToDoListProject.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating list: {ex.Message}");
-                return false;
+                throw new Exception($"Error updating list: {ex.Message}");
             }
         }
 
         public async Task DeleteListAsync(string listId)
         {
-            await _apiService.DeleteToDoListAsync(listId);
-
-            var listToDelete = _toDoLists.FirstOrDefault(l => l.Id == listId);
-
-            if(listToDelete != null)
+            try
             {
-                _toDoLists.Remove(listToDelete);
-                OnListUpdated(EventArgs.Empty);
+                await _apiService.DeleteToDoListAsync(listId);
 
-                if(_toDoLists.Any())
+                var listToDelete = _toDoLists.FirstOrDefault(l => l.Id == listId);
+
+                if (listToDelete != null)
                 {
-                    _navigationService.NavigateToList($"{_toDoLists.First().Id}");
-                }
-                else
-                {
-                    _navigationService.NavigateTo("/");
+                    _toDoLists.Remove(listToDelete);
+                    OnListUpdated(EventArgs.Empty);
+
+                    if (_toDoLists.Any())
+                    {
+                        _navigationService.NavigateToList($"{_toDoLists.First().Id}");
+                    }
+                    else
+                    {
+                        _navigationService.NavigateTo("/");
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting list: {ex.Message}");
+                throw new Exception($"Error deleting list: {ex.Message}");
+            }
+            
         }
 
         protected virtual void OnListUpdated(EventArgs e)
@@ -122,5 +151,57 @@ namespace ToDoListProject.Services
         {
             return _uncompletedCounts.TryGetValue(listId, out int count) ? count : 0;
         }
+
+        #endregion
+        #region ToDos
+
+        public async Task<ToDoItem> AddToDoAsync(ToDoItem newToDo, string listId)
+        {
+            try
+            {
+                newToDo.ToDoListModelId = listId;
+                var addedToDo = await _apiService.AddToDoAsync(newToDo);
+
+                if (addedToDo == null)
+                {
+                    throw new Exception("Failed to add new to do. The response from the server was null.");
+                }
+
+                return addedToDo;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding new to do: {ex.Message}");
+                throw new Exception($"Error adding new to do: {ex.Message}");
+            }
+        }
+
+        public async Task UpdateToDoAsync(ToDoItem updatedToDo)
+        {
+            try
+            {
+                await _apiService.UpdateToDoAsync(updatedToDo);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating to do: {ex.Message}");
+                throw new Exception($"Error updating to do: {ex.Message}");
+            }
+        }
+
+        public async Task DeleteToDoAsync(string toDoId)
+        {
+            try
+            {
+                await _apiService.DeleteToDoAsync(toDoId);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error deleting to do: {ex.Message}");
+                throw new Exception($"Error deleting to do: {ex.Message}");
+            }
+        }
+
+        #endregion
     }
 }

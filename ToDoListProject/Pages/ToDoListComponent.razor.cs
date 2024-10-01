@@ -75,17 +75,17 @@ namespace ToDoListProject.Pages
 
         #region ToDosManagment
         
-        private void HandleEnterKeyDown(KeyboardEventArgs e)
+        private async Task HandleEnterKeyDown(KeyboardEventArgs e)
         {
             _preventDefault = e.Key == "Enter" && !e.ShiftKey;
 
             if (e.Key == "Enter" && !e.ShiftKey)
             {
-                AddNewItem();
+                await AddNewItem();
             }
         }
 
-        private async void AddNewItem()
+        private async Task AddNewItem()
         {
             if (string.IsNullOrWhiteSpace(_newToDoItem.Description))
             {
@@ -109,6 +109,7 @@ namespace ToDoListProject.Pages
 
                 if (ToDoListModel != null)
                 {
+                    await ToDoService.AddToDoAsync(newItem, ListId);
                     ToDoListModel.Items.Add(newItem);
                     _uncompletedToDoItems.Add(newItem);
                     _newToDoItem.Description = string.Empty;
@@ -117,7 +118,7 @@ namespace ToDoListProject.Pages
             }
         }
 
-        private async void UpdateItemCompletionStatus(ToDoItem toDoItem)
+        private async Task UpdateItemCompletionStatus(ToDoItem toDoItem)
         {
             if (toDoItem == null || ToDoListModel == null)
             {
@@ -147,10 +148,11 @@ namespace ToDoListProject.Pages
                 }
             }
 
+            await ToDoService.UpdateToDoAsync(toDoItem);
             await OnUpdateListAsync();
         }
 
-        private async void HandleDeleteItem(ToDoItem toDoItem)
+        private async Task HandleDeleteItem(ToDoItem toDoItem)
         {
             if (toDoItem == null || ToDoListModel == null)
             {
@@ -166,18 +168,19 @@ namespace ToDoListProject.Pages
                 _uncompletedToDoItems.Remove(toDoItem);
             }
 
+            await ToDoService.DeleteToDoAsync(toDoItem.Id);
             ToDoListModel.Items.Remove(toDoItem);
 
             await OnUpdateListAsync();
         }
 
-        private void HandleReorder((int OldIndex, int NewIndex) reorderInfo)
+        private async Task HandleReorder((int OldIndex, int NewIndex) reorderInfo)
         {
             var (oldIndex, newIndex) = reorderInfo;
-            ReorderToDos(oldIndex, newIndex);
+            await ReorderToDos(oldIndex, newIndex);
         }
 
-        public async void ReorderToDos(int oldIndex, int newIndex)
+        public async Task ReorderToDos(int oldIndex, int newIndex)
         {
             var toDos = _uncompletedToDoItems;
             var itemToMove = toDos[oldIndex];
@@ -235,7 +238,7 @@ namespace ToDoListProject.Pages
             StateHasChanged();
         }
 
-        private async void SaveEdit()
+        private async Task SaveEdit()
         {
             if (!string.IsNullOrWhiteSpace(_editListName))
             {
@@ -249,7 +252,7 @@ namespace ToDoListProject.Pages
             _isEditing = false;
         }
 
-        private async void DeleteList()
+        private async Task DeleteList()
         {
             await ToDoService.DeleteListAsync(ListId);
             StateHasChanged();
@@ -260,10 +263,10 @@ namespace ToDoListProject.Pages
             _showDeleteConfirmation = true;
         }
 
-        private void AcceptDeleteConfirmation(MouseEventArgs e)
+        private async Task AcceptDeleteConfirmation(MouseEventArgs e)
         {
             _showDeleteConfirmation = false;
-            DeleteList();
+            await DeleteList();
         }
 
         private void HideDeleteConfirmation(MouseEventArgs e)

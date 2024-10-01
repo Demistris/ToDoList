@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Net.Http.Json;
 using TodoList.Shared.Models;
 using ToDoList.Shared.Models;
@@ -65,8 +66,6 @@ namespace ToDoListProject.Services
 
         public async Task<ToDoListModel> AddToDoListAsync(ToDoListModel newList)
         {
-            Console.WriteLine($"Sending new list: {System.Text.Json.JsonSerializer.Serialize(newList)}");
-
             var response = await _httpClient.PostAsJsonAsync("api/todolist", newList);
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadFromJsonAsync<ToDoListModel>();
@@ -82,6 +81,26 @@ namespace ToDoListProject.Services
         {
             var response = await _httpClient.DeleteAsync($"api/todolist/{listId}");
             response.EnsureSuccessStatusCode();
+        }
+
+        #endregion
+        #region ToDo Service
+
+        public async Task<ToDoItem> AddToDoAsync(ToDoItem newToDo)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"api/todolist/{newToDo.ToDoListModelId}/items", newToDo);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadFromJsonAsync<ToDoItem>();
+        }
+
+        public async Task UpdateToDoAsync(ToDoItem newToDo)
+        {
+
+        }
+
+        public async Task DeleteToDoAsync(string toDoId)
+        {
+
         }
 
         #endregion
