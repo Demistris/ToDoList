@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using TodoList.Shared.DTOs;
 using ToDoList.Shared.Models;
 using ToDoListApi.Services;
 
@@ -12,12 +13,14 @@ namespace ToDoListApi.Controllers
     public class ToDoListController : Controller
     {
         private readonly IToDoListService _toDoListService;
+        private readonly IToDoItemService _toDoItemService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger<ToDoListController> _logger;
 
-        public ToDoListController(IToDoListService toDoListService, IHttpContextAccessor httpContextAccessor, ILogger<ToDoListController> logger)
+        public ToDoListController(IToDoListService toDoListService, IToDoItemService toDoItemService, IHttpContextAccessor httpContextAccessor, ILogger<ToDoListController> logger)
         {
             _toDoListService = toDoListService;
+            _toDoItemService = toDoItemService;
             _httpContextAccessor = httpContextAccessor;
             _logger = logger;
         }
@@ -49,6 +52,8 @@ namespace ToDoListApi.Controllers
                 return StatusCode(500, new { Message = "An error occurred while getting all lists", Error = ex.Message });
             }
         }
+
+        #region ToDoLists
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ToDoListModel>> GetListById(string id)
@@ -139,5 +144,109 @@ namespace ToDoListApi.Controllers
                 return StatusCode(500, new { Message = "An error occurred while deleting the list", Error = ex.Message });
             }         
         }
+
+        #endregion
+        #region ToDos
+
+        [HttpGet("{listId}/todos")]
+        public async Task<ActionResult<List<ToDoItem>>> GetAllToDosForList(string listId)
+        {
+            try
+            {
+                var toDos = await _toDoItemService.GetListToDosAsync(listId);
+                return Ok(toDos);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all to dos");
+                return StatusCode(500, new { Message = "An error occurred while getting all to dos", Error = ex.Message });
+            }
+        }
+
+        [HttpPost("{listId}/todos")]
+        public async Task<ActionResult<ToDoItem>> CreateToDo(string listId, [FromBody] CreateToDoItemDto newToDoDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (newToDoDto.ToDoListModelId != listId)
+            {
+                return BadRequest("ListId mismatch between URL and request body.");
+            }
+
+            var newToDo = new ToDoItem
+            {
+                Description = newToDoDto.Description,
+                Completed = newToDoDto.Completed,
+                ToDoListModelId = newToDoDto.ToDoListModelId
+            };
+
+            try
+            {
+                var createdToDo = await _toDoItemService.AddToDoAsync(listId, newToDo);
+                return CreatedAtAction(nameof(GetToDoById), new { id = createdToDo.Id }, createdToDo);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while creating the to do", Error = ex.Message });
+            }
+        }
+
+        [HttpGet("todos/{id}")]
+        public async Task<ActionResult<ToDoListModel>> GetToDoById(string id)
+        {
+            try
+            {
+                var toDo = await _toDoItemService.GetToDoByIdAsync(id);
+
+                if (toDo == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(toDo);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while retrieving the list", Error = ex.Message });
+            }
+        }
+
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> UpdateToDo(string id, ToDoItem updatedToDo)
+        //{
+        //    if (id != updatedToDo.Id)
+        //    {
+        //        return BadRequest("To do ID mismatch");
+        //    }
+
+        //    try
+        //    {
+        //        await _toDoItemService.UpdateToDoAsync(updatedToDo);
+        //        return NoContent();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { Message = "An error occurred while updating the to do", Error = ex.Message });
+        //    }
+        //}
+
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteToDo(string id)
+        //{
+        //    try
+        //    {
+        //        await _toDoItemService.DeleteToDoAsync(id);
+        //        return NoContent();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, new { Message = "An error occurred while deleting the to do", Error = ex.Message });
+        //    }
+        //}
+
+        #endregion
     }
 }

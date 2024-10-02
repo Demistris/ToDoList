@@ -14,8 +14,21 @@ namespace ToDoListApi.Services
             _context = context;
         }
 
-        public async Task<ToDoItem> AddToDoAsync(ToDoItem newToDo)
+        public async Task<List<ToDoItem>> GetListToDosAsync(string listId)
         {
+            return await _context.ToDoItems.Where(toDo => toDo.ToDoListModelId == listId).ToListAsync();
+        }
+
+        public async Task<ToDoItem> AddToDoAsync(string listId, ToDoItem newToDo)
+        {
+            var list = await _context.ToDoLists.Include(l => l.Items).FirstOrDefaultAsync(l => l.Id == listId);
+
+            if (list == null)
+            {
+                throw new KeyNotFoundException($"List with id {listId} not found.");
+            }
+
+            newToDo.ToDoListModelId = listId;
             _context.ToDoItems.Add(newToDo);
             await _context.SaveChangesAsync();
 

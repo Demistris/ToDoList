@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Net.Http.Json;
+using TodoList.Shared.DTOs;
 using TodoList.Shared.Models;
 using ToDoList.Shared.Models;
+using static System.Net.WebRequestMethods;
 
 namespace ToDoListProject.Services
 {
@@ -86,11 +88,34 @@ namespace ToDoListProject.Services
         #endregion
         #region ToDo Service
 
-        public async Task<ToDoItem> AddToDoAsync(ToDoItem newToDo)
+        public async Task<List<ToDoItem>> GetToDosForListAsync(string listId)
         {
-            var response = await _httpClient.PostAsJsonAsync($"api/todolist/{newToDo.ToDoListModelId}/items", newToDo);
+            var response = await _httpClient.GetAsync($"api/todolist/{listId}/todos");
             response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<ToDoItem>();
+            return await response.Content.ReadFromJsonAsync<List<ToDoItem>>();
+        }
+
+        public async Task<ToDoItem> AddToDoAsync(CreateToDoItemDto newToDo, string listId)
+        {
+            try
+            {
+                Console.WriteLine($"Adding ToDo with Description: {newToDo.Description}, ListId: {listId}, ToDoListModelId: {newToDo.ToDoListModelId}");
+                var response = await _httpClient.PostAsJsonAsync($"api/todolist/{listId}/todos", newToDo);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error response content: {errorContent}");
+                }
+
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadFromJsonAsync<ToDoItem>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding new to do: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task UpdateToDoAsync(ToDoItem newToDo)

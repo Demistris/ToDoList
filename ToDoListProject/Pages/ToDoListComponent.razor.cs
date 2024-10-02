@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using System.Collections.Generic;
 using System.Net.Http.Json;
 using System.Net.NetworkInformation;
+using TodoList.Shared.DTOs;
 using ToDoList.Shared.Models;
 using ToDoListProject.Services;
 
@@ -101,17 +102,18 @@ namespace ToDoListProject.Pages
 
             foreach (var toDo in multilineText)
             {
-                var newItem = new ToDoItem
+                var newItemDto = new CreateToDoItemDto
                 {
                     Description = toDo,
-                    Completed = false
+                    Completed = false,
+                    ToDoListModelId = ListId,
                 };
 
                 if (ToDoListModel != null)
                 {
-                    await ToDoService.AddToDoAsync(newItem, ListId);
-                    ToDoListModel.Items.Add(newItem);
-                    _uncompletedToDoItems.Add(newItem);
+                    var addedToDo = await ToDoService.AddToDoAsync(newItemDto, ListId);
+                    ToDoListModel.Items.Add(addedToDo);
+                    _uncompletedToDoItems.Add(addedToDo);
                     _newToDoItem.Description = string.Empty;
                     await OnUpdateListAsync();
                 }

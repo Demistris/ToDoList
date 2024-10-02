@@ -48,6 +48,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IToDoListService, ToDoListService>();
+builder.Services.AddScoped<IToDoItemService, ToDoItemService>();
 builder.Services.AddHttpContextAccessor();
 
 // Add CORS configuration

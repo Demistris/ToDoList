@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Net.Http;
+using TodoList.Shared.DTOs;
 using ToDoList.Shared.Models;
 
 namespace ToDoListProject.Services
@@ -37,7 +39,6 @@ namespace ToDoListProject.Services
                 Console.WriteLine($"Error getting all lists: {ex.Message}");
                 throw new Exception($"Error getting all lists: {ex.Message}");
             }
-            
         }
 
         public async Task<ToDoListModel> AddListAsync(ToDoListModel newList)
@@ -155,12 +156,26 @@ namespace ToDoListProject.Services
         #endregion
         #region ToDos
 
-        public async Task<ToDoItem> AddToDoAsync(ToDoItem newToDo, string listId)
+        public async Task<List<ToDoItem>> GetToDosForListAsync(string listId)
+        {
+            try
+            {
+                var toDosForList = await _apiService.GetToDosForListAsync(listId);
+                return toDosForList;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting all to dos: {ex.Message}");
+                throw new Exception($"Error getting all to dos: {ex.Message}");
+            }
+        }
+
+        public async Task<ToDoItem> AddToDoAsync(CreateToDoItemDto newToDo, string listId)
         {
             try
             {
                 newToDo.ToDoListModelId = listId;
-                var addedToDo = await _apiService.AddToDoAsync(newToDo);
+                var addedToDo = await _apiService.AddToDoAsync(newToDo, listId);
 
                 if (addedToDo == null)
                 {
