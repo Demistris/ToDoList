@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using ToDoList.Shared.Models;
+using ToDoListApi.Controllers;
 using ToDoListApi.Database;
 
 namespace ToDoListApi.Services
@@ -8,15 +10,25 @@ namespace ToDoListApi.Services
     public class ToDoItemService : IToDoItemService
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<ToDoItemService> _logger;
 
-        public ToDoItemService(ApplicationDbContext context)
+        public ToDoItemService(ApplicationDbContext context, ILogger<ToDoItemService> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
-        public async Task<List<ToDoItem>> GetListToDosAsync(string listId)
+        public async Task<List<ToDoItem>> GetListToDosAsync(string listId, int userId)
         {
-            return await _context.ToDoItems.Where(toDo => toDo.ToDoListModelId == listId).Include(toDo => toDo.ToDoListModelId).ToListAsync();
+            try
+            {
+                return await _context.ToDoItems.Where(t => t.ToDoListModelId == listId && t.ToDoListModel.UserId == userId).ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving todos for list {ListId}", listId);
+                throw;
+            }
         }
 
         public async Task<ToDoItem> AddToDoAsync(string listId, ToDoItem newToDo)

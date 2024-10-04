@@ -84,8 +84,7 @@
     {
         try
         {
-            var allLists = await ToDoService.GetAllListsAsync();
-            _lists = allLists ?? new List<ToDoListModel>();
+            await LoadLists();
 
             ToDoListComponent.ListNameChanged += MyObject_ListNameChanged;
             ToDoService.ListUpdated += MyObject_ListUpdated;
@@ -109,6 +108,19 @@
         }
 
         InvokeAsync(StateHasChanged);
+    }
+
+    private async Task LoadLists()
+    {
+        try
+        {
+            var allLists = await ToDoService.GetAllListsAsync();
+            _lists = allLists ?? new List<ToDoListModel>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading lists: {ex.Message}");
+        }
     }
 
     private void MyObject_ListUpdated(object sender, EventArgs e)
@@ -166,9 +178,24 @@
 
         list.ListName = _editingListName;
         _editingListId = null;
+
         await ToDoService.UpdateListAsync(list);
         NavigationService.NavigateToList($"{list.Id}");
+        await LoadTodosForList(list.Id);
         StateHasChanged();
+    }
+
+    private async Task LoadTodosForList(string listId)
+    {
+        try
+        {
+            var todos = await ToDoService.GetToDosForListAsync(listId);
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading todos for list: {ex.Message}");
+        }
     }
 
     private string GenerateUntitledName()

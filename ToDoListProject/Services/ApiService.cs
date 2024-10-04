@@ -90,9 +90,17 @@ namespace ToDoListProject.Services
 
         public async Task<List<ToDoItem>> GetToDosForListAsync(string listId)
         {
-            var response = await _httpClient.GetAsync($"api/todolist/{listId}/todos");
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<List<ToDoItem>>();
+            try
+            {
+                var response = await _httpClient.GetAsync($"api/todolist/{listId}/todos");
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadFromJsonAsync<List<ToDoItem>>();
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error getting todos: {ex.Message}");
+                throw;
+            }
         }
 
         public async Task<ToDoItem> AddToDoAsync(CreateToDoItemDto newToDo, string listId)

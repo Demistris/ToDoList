@@ -32,22 +32,6 @@ namespace ToDoListProject.Pages
         private bool _preventDefault;
         private bool _isLoading = true;
 
-        //protected override async Task OnParametersSetAsync()
-        //{
-        //    if (!string.IsNullOrEmpty(ListId))
-        //    {
-        //        ToDoListModel = await ApiService.GetToDoListAsync(ListId);
-
-        //        if (ToDoListModel != null)
-        //        {
-        //            _uncompletedToDoItems = ToDoListModel.Items.Where(i => !i.Completed).ToList();
-        //            _completedToDoItems = ToDoListModel.Items.Where(i => i.Completed).ToList();
-        //        }
-
-        //        await LoadTodoList();
-        //    }
-        //}
-
         protected override async Task OnParametersSetAsync()
         {
             if (!string.IsNullOrEmpty(ListId))
@@ -81,31 +65,13 @@ namespace ToDoListProject.Pages
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading todo list: {ex.Message}");
-                // You might want to set an error message property here to display to the user
+                throw new Exception(ex.Message);
             }
             finally
             {
                 _isLoading = false;
             }
         }
-
-        //private async Task LoadTodoList()
-        //{
-        //    _isLoading = true;
-
-        //    try
-        //    {
-        //        ToDoListModel = await Http.GetFromJsonAsync<ToDoListModel>($"api/todolist/{ListId}");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"Error loading todo list: {ex.Message}");
-        //    }
-        //    finally
-        //    {
-        //        _isLoading = false;
-        //    }
-        //}
 
         private void TrimString(string stringToTrim, int maxLength)
         {

@@ -15,7 +15,15 @@ namespace ToDoListApi.Services
 
         public async Task<List<ToDoListModel>> GetUserListsAsync(int userId)
         {
-            return await _context.ToDoLists.Where(list => list.UserId == userId).Include(list => list.Items).ToListAsync();
+            return await _context.ToDoLists
+            .Where(l => l.UserId == userId)
+            .Select(l => new ToDoListModel
+            {
+                Id = l.Id,
+                ListName = l.ListName,
+                UserId = l.UserId
+            })
+            .ToListAsync();
         }
 
         public async Task<ToDoListModel> GetListByIdAsync(string listId, int userId)

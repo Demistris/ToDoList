@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System.Security.Claims;
 using System.Text.Json;
 using TodoList.Shared.DTOs;
 using ToDoList.Shared.Models;
@@ -43,12 +45,21 @@ namespace ToDoListApi.Controllers
             try
             {
                 var userId = GetUserIdFromToken();
+                _logger.LogInformation("Getting lists for user: {UserId}", userId);
+
+                if (string.IsNullOrEmpty(userId.ToString()))
+                {
+                    _logger.LogWarning("User ID is null or empty");
+                    return Unauthorized();
+                }
+
                 var lists = await _toDoListService.GetUserListsAsync(userId);
+                _logger.LogInformation("Retrieved {Count} lists", lists.Count);
                 return Ok(lists);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all lists");
+                _logger.LogError(ex, "Error getting all lists: {ErrorMessage}", ex.Message);
                 return StatusCode(500, new { Message = "An error occurred while getting all lists", Error = ex.Message });
             }
         }
@@ -153,13 +164,17 @@ namespace ToDoListApi.Controllers
         {
             try
             {
-                var toDos = await _toDoItemService.GetListToDosAsync(listId);
+                var userId = GetUserIdFromToken();
+                _logger.LogInformation("Getting todos for list: {ListId}, User: {UserId}", listId, userId);
+
+                var toDos = await _toDoItemService.GetListToDosAsync(listId, userId);
+                _logger.LogInformation("Retrieved {Count} todos", toDos.Count);
                 return Ok(toDos);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all to dos");
-                return StatusCode(500, new { Message = "An error occurred while getting all to dos", Error = ex.Message });
+                _logger.LogError(ex, "Error getting todos for list {ListId}", listId);
+                return StatusCode(500, new { Message = "An error occurred while getting todos", Error = ex.Message });
             }
         }
 

@@ -4,7 +4,7 @@ namespace ToDoListApi.Services
 {
     public interface IToDoItemService
     {
-        Task<List<ToDoItem>> GetListToDosAsync(string listId);
+        Task<List<ToDoItem>> GetListToDosAsync(string listId, int userId);
         Task<ToDoItem> AddToDoAsync(string listId, ToDoItem newToDo);
         Task UpdateToDoAsync(ToDoItem updatedToDo);
         Task DeleteToDoAsync(string toDoId);
