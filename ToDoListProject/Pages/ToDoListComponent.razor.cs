@@ -32,18 +32,26 @@ namespace ToDoListProject.Pages
         private bool _preventDefault;
         private bool _isLoading = true;
 
+        //protected override async Task OnParametersSetAsync()
+        //{
+        //    if (!string.IsNullOrEmpty(ListId))
+        //    {
+        //        ToDoListModel = await ApiService.GetToDoListAsync(ListId);
+
+        //        if (ToDoListModel != null)
+        //        {
+        //            _uncompletedToDoItems = ToDoListModel.Items.Where(i => !i.Completed).ToList();
+        //            _completedToDoItems = ToDoListModel.Items.Where(i => i.Completed).ToList();
+        //        }
+
+        //        await LoadTodoList();
+        //    }
+        //}
+
         protected override async Task OnParametersSetAsync()
         {
             if (!string.IsNullOrEmpty(ListId))
             {
-                ToDoListModel = await ApiService.GetToDoListAsync(ListId);
-
-                if (ToDoListModel != null)
-                {
-                    _uncompletedToDoItems = ToDoListModel.Items.Where(i => !i.Completed).ToList();
-                    _completedToDoItems = ToDoListModel.Items.Where(i => i.Completed).ToList();
-                }
-
                 await LoadTodoList();
             }
         }
@@ -54,17 +62,50 @@ namespace ToDoListProject.Pages
 
             try
             {
-                ToDoListModel = await Http.GetFromJsonAsync<ToDoListModel>($"api/todolist/{ListId}");
+                // Get the ToDoListModel (if you still need this information)
+                ToDoListModel = await ApiService.GetToDoListAsync(ListId);
+
+                // Get the todos for this list using the new method
+                var todos = await ToDoService.GetToDosForListAsync(ListId);
+
+                // Update the ToDoListModel's Items if it exists
+                if (ToDoListModel != null)
+                {
+                    ToDoListModel.Items = todos;
+                }
+
+                // Update the completed and uncompleted lists
+                _uncompletedToDoItems = todos.Where(i => !i.Completed).ToList();
+                _completedToDoItems = todos.Where(i => i.Completed).ToList();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error loading todo list: {ex.Message}");
+                // You might want to set an error message property here to display to the user
             }
             finally
             {
                 _isLoading = false;
             }
         }
+
+        //private async Task LoadTodoList()
+        //{
+        //    _isLoading = true;
+
+        //    try
+        //    {
+        //        ToDoListModel = await Http.GetFromJsonAsync<ToDoListModel>($"api/todolist/{ListId}");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Console.WriteLine($"Error loading todo list: {ex.Message}");
+        //    }
+        //    finally
+        //    {
+        //        _isLoading = false;
+        //    }
+        //}
 
         private void TrimString(string stringToTrim, int maxLength)
         {

@@ -16,7 +16,7 @@ namespace ToDoListApi.Services
 
         public async Task<List<ToDoItem>> GetListToDosAsync(string listId)
         {
-            return await _context.ToDoItems.Where(toDo => toDo.ToDoListModelId == listId).ToListAsync();
+            return await _context.ToDoItems.Where(toDo => toDo.ToDoListModelId == listId).Include(toDo => toDo.ToDoListModelId).ToListAsync();
         }
 
         public async Task<ToDoItem> AddToDoAsync(string listId, ToDoItem newToDo)
